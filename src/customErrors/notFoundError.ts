@@ -1,7 +1,7 @@
-import CustomError from './';
+import CustomError from './customError';
 
 class NotFoundError extends CustomError {
-  errorCode = 400;
+  errorCode = 404;
   errorType = 'Not Found';
 
   serializeErrors() {

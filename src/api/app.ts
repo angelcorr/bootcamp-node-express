@@ -1,5 +1,6 @@
 import express, { json, urlencoded } from 'express';
 import env from '../config';
+import errorHandler from '../middlewares/errorHandler';
 
 export class App {
   private app: express.Application = express();
@@ -12,16 +13,12 @@ export class App {
   private setMiddleware() {
     this.app.use(json({ limit: '10kb' }));
     this.app.use(urlencoded({ extended: false }));
+    this.app.use('*', errorHandler);
   }
 
   private setRoutes() {
     this.app.get('/healthcheck', (req, res) => {
       res.send('GET request to the homepage');
-    });
-
-    this.app.get('*', (req, res) => {
-      res.status(500);
-      res.send('Not found');
     });
   }
 

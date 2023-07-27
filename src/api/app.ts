@@ -16,12 +16,12 @@ export class App {
 
   private setRoutes() {
     this.app.get('/healthcheck', (req, res) => {
-      res.send('GET request to the homepage')
+      res.send('GET request to the homepage');
     });
 
     this.app.get('*', (req, res) => {
-      res.status(500)
-      res.send('Not found')
+      res.status(500);
+      res.send('Not found');
     });
   }
 

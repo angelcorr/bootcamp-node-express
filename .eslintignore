@@ -1,0 +1,8 @@
+node_modules
+dist
+.vscode
+*.config.js
+.webpack
+**/*.js
+.env
+.prettierrc.json

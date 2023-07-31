@@ -2,7 +2,7 @@ export class Transaction {
   private id: string;
   private source_account_id: string;
   private deliver_account_id: string;
-  private time: string;
+  private time: Date;
   private description: string;
   private amount: number;
   private currency_id: number;
@@ -12,7 +12,7 @@ export class Transaction {
     id: string,
     source_account_id: string,
     deliver_account_id: string,
-    time: string,
+    time: Date,
     description: string,
     amount: number,
     currency_id: number,

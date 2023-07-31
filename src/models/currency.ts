@@ -1,9 +1,9 @@
 export class Currency {
   private id: number;
-  private currency_type: number;
+  private type: string;
 
-  constructor(id: number, currency_type: number) {
+  constructor(id: number, type: string) {
     this.id = id;
-    this.currency_type = currency_type;
+    this.type = type;
   }
 }

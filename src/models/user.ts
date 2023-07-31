@@ -1,5 +1,5 @@
 export class User {
-  public id: string;
+  private id: string;
   private username: string;
   private hash_password: string;
 

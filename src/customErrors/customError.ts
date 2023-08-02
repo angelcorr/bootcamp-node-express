@@ -7,7 +7,7 @@ abstract class CustomError extends Error {
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 
-  abstract serializeErrors(): { message: string }[];
+  abstract serializeErrors(): { message: string; errorType: string };
 }
 
 export default CustomError;

@@ -11,3 +11,9 @@ export class Account {
     this.currency_id = currency_id;
   }
 }
+
+export enum CurrencyType {
+  USD = 'USD',
+  EUR = 'EUR',
+  UYU = 'UYU',
+}

@@ -1,4 +1,5 @@
-import { AccountRepository, accountRepository } from '../repositories';
+import { repositories } from '../repositories';
+import { AccountRepository } from '../repositories/account.repository';
 
 export class AccountService {
   private accountRepository;
@@ -8,4 +9,4 @@ export class AccountService {
   }
 }
 
-export const accountService = new AccountService(accountRepository);
+export const accountService = new AccountService(repositories.accountRepository);

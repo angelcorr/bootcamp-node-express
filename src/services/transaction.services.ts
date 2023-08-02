@@ -1,4 +1,5 @@
-import { TransactionRepository, transactionRepository } from '../repositories';
+import { repositories } from '../repositories';
+import { TransactionRepository } from '../repositories/transaction.repository';
 
 export class TransactionService {
   private transactionRepository;
@@ -8,4 +9,4 @@ export class TransactionService {
   }
 }
 
-export const transactionService = new TransactionService(transactionRepository);
+export const transactionService = new TransactionService(repositories.transactionRepository);

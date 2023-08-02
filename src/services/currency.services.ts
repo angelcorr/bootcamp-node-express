@@ -1,4 +1,5 @@
-import { CurrencyRepository, currencyRepository } from '../repositories';
+import { repositories } from '../repositories';
+import { CurrencyRepository } from '../repositories/currency.repository';
 
 export class CurrencyService {
   private currencyRepository;
@@ -8,4 +9,4 @@ export class CurrencyService {
   }
 }
 
-export const currencyService = new CurrencyService(currencyRepository);
+export const currencyService = new CurrencyService(repositories.currencyRepository);

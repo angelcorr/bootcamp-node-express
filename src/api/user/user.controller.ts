@@ -10,7 +10,7 @@ export class UserController {
     this.userService = userService;
   }
 
-  async signUp(req: Request, res: Response, next: NextFunction) {
+  public signUp = async (req: Request, res: Response, next: NextFunction) => {
     const { last_name, first_name, email, password } = req.body;
     const signUp = new SignUp(last_name, first_name, email, password);
 
@@ -22,7 +22,7 @@ export class UserController {
 
     const newUser = await this.userService.createUser(signUp);
     res.status(200).send(newUser);
-  }
+  };
 }
 
 export const userController = new UserController(services.userService);

@@ -17,10 +17,7 @@ class UserRoutes {
   }
 
   private setRoutes() {
-    this.userRouter.post(
-      '/sign-up',
-      asyncHandler((req, res, next) => this.userController.signUp(req, res, next)),
-    );
+    this.userRouter.post('/sign-up', asyncHandler(this.userController.signUp));
   }
 }
 

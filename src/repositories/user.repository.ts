@@ -1,11 +1,18 @@
-import { User } from '../models';
-import Repository from './repository';
+import { NewUser, User } from '../models';
+import crypto from 'crypto';
+import IRepository from './repository.interface';
 
-export class UserRepository implements Repository<User> {
+export class UserRepository implements IRepository<NewUser, User> {
   users: User[] = [];
 
-  add(user: User) {
+  add(newUser: NewUser): User {
+    const { first_name, last_name, email, hash_password } = newUser;
+    const id = crypto.randomUUID();
+    const user = new User(id, first_name, last_name, email, hash_password);
+
     this.users.push(user);
+
+    return user;
   }
 }
 

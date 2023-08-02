@@ -1,12 +1,10 @@
-export class User {
-  public id: string;
+export class NewUser {
   public first_name: string;
   public last_name: string;
   public email: string;
   public hash_password: string;
 
-  constructor(id: string, first_name: string, last_name: string, email: string, hash_password: string) {
-    this.id = id;
+  constructor(first_name: string, last_name: string, email: string, hash_password: string) {
     this.first_name = first_name;
     this.last_name = last_name;
     this.email = email;

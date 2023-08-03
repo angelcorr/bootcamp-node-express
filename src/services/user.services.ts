@@ -3,25 +3,25 @@ import { CurrencyType, NewAccount, NewUser, SignUp, User } from '../models';
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
-import { CurrencyRepository } from '../repositories/currency.repository';
-import { AccountRepository } from '../repositories/account.repository';
+import { currencyService, CurrencyService } from './currency.services';
+import { accountService, AccountService } from './account.services';
 
 export class UserService {
   private userRepository;
-  private currencyRepository;
-  private accountRepository;
+  private currencyService;
+  private accountService;
 
   constructor(
     userRepository: UserRepository,
-    currencyRepository: CurrencyRepository,
-    accountRepository: AccountRepository,
+    currencyService: CurrencyService,
+    accountService: AccountService,
   ) {
     this.userRepository = userRepository;
-    this.currencyRepository = currencyRepository;
-    this.accountRepository = accountRepository;
+    this.currencyService = currencyService;
+    this.accountService = accountService;
   }
 
-  async createUser(signUp: SignUp): Promise<User> {
+  public createUser = async (signUp: SignUp): Promise<User> => {
     const { last_name, first_name, email, password } = signUp;
 
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
@@ -44,11 +44,11 @@ export class UserService {
     this.accountService.createAccount(uyuNewAccount);
 
     return user;
-  }
+  };
 }
 
 export const userService: UserService = new UserService(
   repositories.userRepository,
-  services.currencyService,
-  services.accountService,
+  currencyService,
+  accountService,
 );

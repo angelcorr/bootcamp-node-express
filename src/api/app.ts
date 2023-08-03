@@ -1,6 +1,7 @@
 import express, { json, urlencoded } from 'express';
 import env from '../config';
 import errorHandler from '../middlewares/errorHandler';
+import { userRouter } from './user/user.routes';
 
 export class App {
   private app: express.Application = express();
@@ -8,18 +9,20 @@ export class App {
   constructor() {
     this.setMiddleware();
     this.setRoutes();
+    this.app.use(errorHandler);
   }
 
   private setMiddleware() {
     this.app.use(json({ limit: '10kb' }));
     this.app.use(urlencoded({ extended: false }));
-    this.app.use('*', errorHandler);
   }
 
   private setRoutes() {
     this.app.get('/healthcheck', (req, res) => {
       res.send('GET request to the homepage');
     });
+
+    this.app.use('/users', userRouter.getRouter());
   }
 
   public start() {

@@ -1,10 +1,10 @@
 export class Exchange {
-  private currency_id: number;
+  private currencyId: number;
   private date: Date;
   private rate: number;
 
-  constructor(currency_id: number, date: Date, rate: number) {
-    this.currency_id = currency_id;
+  constructor(currencyId: number, date: Date, rate: number) {
+    this.currencyId = currencyId;
     this.date = date;
     this.rate = rate;
   }

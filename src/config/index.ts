@@ -5,7 +5,6 @@ dotEnv.config();
 
 const env = ((): envVarsSchemaType => {
   const validateEnvVarsSchemaResult = envVarsSchema.safeParse(process.env);
-  console.log('validateEnvVarsSchemaResult.error', validateEnvVarsSchemaResult);
 
   if (!validateEnvVarsSchemaResult.success) throw new Error(validateEnvVarsSchemaResult.error.toString());
   return validateEnvVarsSchemaResult.data;

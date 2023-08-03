@@ -1,11 +1,12 @@
 import { Exchange } from '../models';
-import Repository from './repository';
+import IRepository from './repository.interface';
 
-export class ExchangeRepository implements Repository<Exchange> {
+export class ExchangeRepository implements IRepository<Exchange, Exchange> {
   exchanges: Exchange[] = [];
 
   add(exchange: Exchange) {
     this.exchanges.push(exchange);
+    return exchange;
   }
 }
 

@@ -1,11 +1,12 @@
 import { Transaction } from '../models';
-import Repository from './repository';
+import IRepository from './repository.interface';
 
-export class TransactionRepository implements Repository<Transaction> {
+export class TransactionRepository implements IRepository<Transaction, Transaction> {
   transactions: Transaction[] = [];
 
   add(transaction: Transaction) {
     this.transactions.push(transaction);
+    return transaction;
   }
 }
 

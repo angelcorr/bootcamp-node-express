@@ -1,4 +1,6 @@
-import { CurrencyRepository, currencyRepository } from '../repositories';
+import { Currency } from '../models';
+import { repositories } from '../repositories';
+import { CurrencyRepository } from '../repositories/currency.repository';
 
 export class CurrencyService {
   private currencyRepository;
@@ -6,6 +8,10 @@ export class CurrencyService {
   constructor(currencyRepository: CurrencyRepository) {
     this.currencyRepository = currencyRepository;
   }
+
+  public getCurrency = (code: string): Currency => {
+    return this.currencyRepository.getByCode(code);
+  };
 }
 
-export const currencyService = new CurrencyService(currencyRepository);
+export const currencyService = new CurrencyService(repositories.currencyRepository);

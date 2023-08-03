@@ -1,4 +1,5 @@
-import { ExchangeRepository, exchangeRepository } from '../repositories';
+import { repositories } from '../repositories';
+import { ExchangeRepository } from '../repositories/exchange.repository';
 
 export class ExchangeService {
   private exchangeRepository;
@@ -8,4 +9,4 @@ export class ExchangeService {
   }
 }
 
-export const exchangeService = new ExchangeService(exchangeRepository);
+export const exchangeService = new ExchangeService(repositories.exchangeRepository);

@@ -1,11 +1,15 @@
 export class User {
-  private id: string;
-  private username: string;
-  private hash_password: string;
+  public id: string;
+  public firstName: string;
+  public lastName: string;
+  public email: string;
+  public hashPassword: string;
 
-  constructor(id: string, username: string, hash_password: string) {
+  constructor(id: string, firstName: string, lastName: string, email: string, hashPassword: string) {
     this.id = id;
-    this.username = username;
-    this.hash_password = hash_password;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.hashPassword = hashPassword;
   }
 }

@@ -1,13 +1,19 @@
 export class Account {
   private id: string;
   private capital: number;
-  private user_id: string;
-  private currency_id: number;
+  private userId: string;
+  private currencyId: number;
 
-  constructor(id: string, capital: number, user_id: string, currency_id: number) {
+  constructor(id: string, capital: number, userId: string, currencyId: number) {
     this.id = id;
     this.capital = capital;
-    this.user_id = user_id;
-    this.currency_id = currency_id;
+    this.userId = userId;
+    this.currencyId = currencyId;
   }
+}
+
+export enum CurrencyType {
+  USD = 'USD',
+  EUR = 'EUR',
+  UYU = 'UYU',
 }

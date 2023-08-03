@@ -30,25 +30,25 @@ export class UserService {
     const newUser = new NewUser(last_name, first_name, email, hash_password);
     const user = this.userRepository.add(newUser);
 
-    const usdCurrency = this.currencyRepository.getByCode(CurrencyType.USD);
-    const eurCurrency = this.currencyRepository.getByCode(CurrencyType.EUR);
-    const uyuCurrency = this.currencyRepository.getByCode(CurrencyType.UYU);
+    const usdCurrency = this.currencyService.getCurrency(CurrencyType.USD);
+    const eurCurrency = this.currencyService.getCurrency(CurrencyType.EUR);
+    const uyuCurrency = this.currencyService.getCurrency(CurrencyType.UYU);
 
     const usdNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, usdCurrency.id);
-    this.accountRepository.add(usdNewAccount);
+    this.accountService.createAccount(usdNewAccount);
 
     const eurNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, eurCurrency.id);
-    this.accountRepository.add(eurNewAccount);
+    this.accountService.createAccount(eurNewAccount);
 
     const uyuNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, uyuCurrency.id);
-    this.accountRepository.add(uyuNewAccount);
+    this.accountService.createAccount(uyuNewAccount);
 
     return user;
   }
 }
 
-export const userService = new UserService(
+export const userService: UserService = new UserService(
   repositories.userRepository,
-  repositories.currencyRepository,
-  repositories.accountRepository,
+  services.currencyService,
+  services.accountService,
 );

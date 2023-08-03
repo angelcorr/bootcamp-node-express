@@ -10,8 +10,6 @@ class UnprocessableContentError extends CustomError {
   }
 
   serializeErrors() {
-    // console.log('this.message', this.message);
-
     return { message: this.message, errorType: this.errorType };
   }
 }

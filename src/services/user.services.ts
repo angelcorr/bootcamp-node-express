@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { CurrencyType, NewAccount, NewUser, SignUp, User } from '../models';
+import { CurrencyType, SignUp, User } from '../models';
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
@@ -25,22 +25,34 @@ export class UserService {
     const { lastName, firstName, email, password } = signUp;
 
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
-    const hash_password = await bcrypt.hash(password, salt);
+    const hashPassword = await bcrypt.hash(password, salt);
 
-    const newUser = new NewUser(lastName, firstName, email, hash_password);
+    const newUser = { lastName, firstName, email, hashPassword };
     const user = this.userRepository.add(newUser);
 
     const usdCurrency = this.currencyService.getCurrency(CurrencyType.USD);
     const eurCurrency = this.currencyService.getCurrency(CurrencyType.EUR);
     const uyuCurrency = this.currencyService.getCurrency(CurrencyType.UYU);
 
-    const usdNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, usdCurrency.id);
+    const usdNewAccount = {
+      capital: constants.DEFAULT_CAPITAL_AMOUNT,
+      userId: user.id,
+      currencyId: usdCurrency.id,
+    };
     this.accountService.createAccount(usdNewAccount);
 
-    const eurNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, eurCurrency.id);
+    const eurNewAccount = {
+      capital: constants.DEFAULT_CAPITAL_AMOUNT,
+      userId: user.id,
+      currencyId: eurCurrency.id,
+    };
     this.accountService.createAccount(eurNewAccount);
 
-    const uyuNewAccount = new NewAccount(constants.DEFAULT_CAPITAL_AMOUNT, user.id, uyuCurrency.id);
+    const uyuNewAccount = {
+      capital: constants.DEFAULT_CAPITAL_AMOUNT,
+      userId: user.id,
+      currencyId: uyuCurrency.id,
+    };
     this.accountService.createAccount(uyuNewAccount);
 
     return user;

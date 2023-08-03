@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { AnyZodObject } from 'zod';
 
-const validationHandler = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
+const validationBodyHandler = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   const validateUserData = schema.safeParse(req.body);
   if (!validateUserData.success) {
     next(validateUserData.error);
@@ -11,4 +11,4 @@ const validationHandler = (schema: AnyZodObject) => (req: Request, res: Response
   next();
 };
 
-export default validationHandler;
+export default validationBodyHandler;

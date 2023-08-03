@@ -22,12 +22,12 @@ export class UserService {
   }
 
   public createUser = async (signUp: SignUp): Promise<User> => {
-    const { last_name, first_name, email, password } = signUp;
+    const { lastName, firstName, email, password } = signUp;
 
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
     const hash_password = await bcrypt.hash(password, salt);
 
-    const newUser = new NewUser(last_name, first_name, email, hash_password);
+    const newUser = new NewUser(lastName, firstName, email, hash_password);
     const user = this.userRepository.add(newUser);
 
     const usdCurrency = this.currencyService.getCurrency(CurrencyType.USD);

@@ -1,4 +1,4 @@
-import { Currency } from '../models';
+import { Currency, CurrencyType } from '../models';
 import IRepository from './repository.interface';
 
 export class CurrencyRepository implements IRepository<Currency, Currency> {
@@ -6,15 +6,15 @@ export class CurrencyRepository implements IRepository<Currency, Currency> {
 
   currencySeed() {
     const usdType = 'United States dollar';
-    const usdCode = 'USD';
+    const usdCode = CurrencyType.USD;
     const usd = new Currency(1, usdType, usdCode);
 
     const eurType = 'Euro';
-    const eurCode = 'EUR';
+    const eurCode = CurrencyType.EUR;
     const eur = new Currency(2, eurType, eurCode);
 
     const uyuType = 'Uruguayan Peso';
-    const uyuCode = 'UYU';
+    const uyuCode = CurrencyType.UYU;
     const uyu = new Currency(3, uyuType, uyuCode);
     return [usd, eur, uyu];
   }

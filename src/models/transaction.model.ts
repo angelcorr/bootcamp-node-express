@@ -5,7 +5,7 @@ export class Transaction {
   private time: Date;
   private description: string;
   private amount: number;
-  private currency_id: number;
+  private currencyId: number;
   private exchange_date: Date;
 
   constructor(
@@ -15,7 +15,7 @@ export class Transaction {
     time: Date,
     description: string,
     amount: number,
-    currency_id: number,
+    currencyId: number,
     exchange_date: Date,
   ) {
     this.id = id;
@@ -24,7 +24,7 @@ export class Transaction {
     this.time = time;
     this.description = description;
     this.amount = amount;
-    this.currency_id = currency_id;
+    this.currencyId = currencyId;
     this.exchange_date = exchange_date;
   }
 }

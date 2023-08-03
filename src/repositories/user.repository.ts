@@ -6,9 +6,9 @@ export class UserRepository implements IRepository<NewUser, User> {
   users: User[] = [];
 
   add(newUser: NewUser): User {
-    const { first_name, last_name, email, hash_password } = newUser;
+    const { firstName, lastName, email, hashPassword } = newUser;
     const id = crypto.randomUUID();
-    const user = new User(id, first_name, last_name, email, hash_password);
+    const user = new User(id, firstName, lastName, email, hashPassword);
 
     this.users.push(user);
 

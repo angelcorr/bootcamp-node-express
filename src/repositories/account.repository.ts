@@ -6,9 +6,9 @@ export class AccountRepository implements IRepository<NewAccount, Account> {
   accounts: Account[] = [];
 
   add(newAccount: NewAccount): Account {
-    const { capital, user_id, currency_id } = newAccount;
+    const { capital, userId, currencyId } = newAccount;
     const id = crypto.randomUUID();
-    const account = new Account(id, capital, user_id, currency_id);
+    const account = new Account(id, capital, userId, currencyId);
 
     this.accounts.push(account);
 

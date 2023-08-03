@@ -1,11 +1,11 @@
 export class NewAccount {
   public capital: number;
-  public user_id: string;
-  public currency_id: number;
+  public userId: string;
+  public currencyId: number;
 
-  constructor(capital: number, user_id: string, currency_id: number) {
+  constructor(capital: number, userId: string, currencyId: number) {
     this.capital = capital;
-    this.user_id = user_id;
-    this.currency_id = currency_id;
+    this.userId = userId;
+    this.currencyId = currencyId;
   }
 }

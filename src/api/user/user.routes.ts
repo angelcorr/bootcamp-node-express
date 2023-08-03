@@ -1,6 +1,8 @@
 import express from 'express';
 import { UserController, userController } from './user.controller';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
+import validationHandler from '../../middlewares/validationHandler';
+import { userSchema } from '../../models';
 
 class UserRoutes {
   private userController;
@@ -17,7 +19,7 @@ class UserRoutes {
   }
 
   private setRoutes() {
-    this.userRouter.post('/sign-up', asyncHandler(this.userController.signUp));
+    this.userRouter.post('/sign-up', validationHandler(userSchema), asyncHandler(this.userController.signUp));
   }
 }
 

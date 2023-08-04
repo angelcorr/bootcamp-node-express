@@ -7,7 +7,7 @@ export type SignUp = {
   password: string;
 };
 
-export const userSchema = z.object({
+export const signUpSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),

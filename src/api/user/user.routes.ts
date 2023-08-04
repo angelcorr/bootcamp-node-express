@@ -1,8 +1,10 @@
 import express from 'express';
 import { UserController, userController } from './user.controller';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
+import passport from '../../middlewares/passport';
 import validationBodyHandler from '../../middlewares/validationBodyHandler';
 import { userSchema } from '../../models';
+import { loginSchema } from '../../models/login.model';
 
 class UserRoutes {
   private userController;
@@ -23,6 +25,12 @@ class UserRoutes {
       '/sign-up',
       validationBodyHandler(userSchema),
       asyncHandler(this.userController.signUp),
+    );
+    this.userRouter.post(
+      '/login',
+      validationBodyHandler(loginSchema),
+      passport.authenticate('local', { session: false }),
+      asyncHandler(this.userController.login),
     );
   }
 }

@@ -57,6 +57,10 @@ export class UserService {
 
     return user;
   };
+
+  public getUser = (email: string): User | null => {
+    return this.userRepository.getUser(email);
+  };
 }
 
 export const userService: UserService = new UserService(

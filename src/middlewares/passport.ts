@@ -8,7 +8,7 @@ const LocalStrategy = passportLocal.Strategy;
 const localStrategy = new LocalStrategy(
   { usernameField: 'email', passwordField: 'password' },
   async (email: string, password: string, done) => {
-    const user = services.userService.getUser(email);
+    const user = services.userService.get(email);
 
     if (!user) {
       done(new UnauthorizedError('The email or password are incorrect'));

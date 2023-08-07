@@ -18,7 +18,7 @@ const localStrategy = new LocalStrategy(
       if (email === user.email && comparedHash) {
         done(null, { email, sub: user.id });
       } else {
-        done(new Error('The email or password are incorrect'));
+        done(new UnauthorizedError('The email or password are incorrect'));
       }
     }
   },

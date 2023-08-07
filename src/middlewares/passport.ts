@@ -2,7 +2,7 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import bcrypt from 'bcrypt';
 import { services } from '../services';
-import NotFoundError from '../customErrors/notFoundError';
+import UnauthorizedError from '../customErrors/unauthorizedError';
 
 const LocalStrategy = passportLocal.Strategy;
 const localStrategy = new LocalStrategy(
@@ -11,14 +11,14 @@ const localStrategy = new LocalStrategy(
     const user = services.userService.getUser(email);
 
     if (!user) {
-      done(new NotFoundError('User not found'));
+      done(new UnauthorizedError('The email or password are incorrect'));
     } else {
       const comparedHash = await bcrypt.compare(password, user.hashPassword);
 
       if (email === user.email && comparedHash) {
         done(null, { email, sub: user.id });
       } else {
-        done(new Error('Invalid login'));
+        done(new Error('The email or password are incorrect'));
       }
     }
   },

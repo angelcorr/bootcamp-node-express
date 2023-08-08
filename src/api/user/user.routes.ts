@@ -39,6 +39,12 @@ class UserRoutes {
       passport.authenticate('jwt', { session: false }),
       asyncHandler(this.userController.getUserAccounts),
     );
+
+    this.userRouter.get(
+      '/:id',
+      passport.authenticate('jwt', { session: false }),
+      asyncHandler(this.userController.getUser),
+    );
   }
 }
 

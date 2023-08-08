@@ -40,6 +40,17 @@ export class UserController {
 
     res.send({ accounts: userAccounts });
   };
+
+  public getUser = async (req: Request, res: Response) => {
+    const user = req.user as User;
+    if (req.params.id !== user.id) {
+      throw new UnauthorizedError('Invalid user');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashPassword, ...userResponse } = user;
+    res.send({ user: userResponse });
+  };
 }
 
 export const userController = new UserController(services.userService);

@@ -4,6 +4,7 @@ import { services } from '../../services';
 import { UserService } from '../../services/user.services';
 import { User } from '../../models';
 import constants from '../../constants';
+import UnauthorizedError from '../../customErrors/unauthorizedError';
 
 export class UserController {
   private userService;
@@ -31,6 +32,10 @@ export class UserController {
 
   public getUserAccount = async (req: Request, res: Response) => {
     const user = req.user as User;
+    if (req.params.id !== user.id) {
+      throw new UnauthorizedError('Invalid user');
+    }
+
     const userAccounts = this.userService.getUserAccounts(user.id);
 
     res.send({ accounts: userAccounts });

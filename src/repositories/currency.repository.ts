@@ -30,6 +30,13 @@ export class CurrencyRepository implements IRepository<Currency, Currency> {
 
     return found;
   }
+
+  getCurrencyById(id: number): Currency {
+    const found = this.currencies.find((currency) => currency.id === id);
+    if (!found) throw new Error(`Id not found: ${id}`);
+
+    return found;
+  }
 }
 
 export const currencyRepository = new CurrencyRepository();

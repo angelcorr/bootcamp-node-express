@@ -1,5 +1,6 @@
 import express, { json, urlencoded } from 'express';
 import env from '../config';
+import cookieParser from 'cookie-parser';
 import errorHandler from '../middlewares/errorHandler';
 import { userRouter } from './user/user.routes';
 
@@ -15,6 +16,7 @@ export class App {
   private setMiddleware() {
     this.app.use(json({ limit: '10kb' }));
     this.app.use(urlencoded({ extended: false }));
+    this.app.use(cookieParser());
   }
 
   private setRoutes() {

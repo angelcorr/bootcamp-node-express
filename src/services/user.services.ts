@@ -5,8 +5,9 @@ import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
 import { currencyService, CurrencyService } from './currency.services';
 import { accountService, AccountService } from './account.services';
+import IService from './service.interface';
 
-export class UserService {
+export class UserService implements IService<User> {
   private userRepository;
   private currencyService;
   private accountService;
@@ -30,9 +31,9 @@ export class UserService {
     const newUser = { lastName, firstName, email, hashPassword };
     const user = this.userRepository.add(newUser);
 
-    const usdCurrency = this.currencyService.getCurrency(CurrencyType.USD);
-    const eurCurrency = this.currencyService.getCurrency(CurrencyType.EUR);
-    const uyuCurrency = this.currencyService.getCurrency(CurrencyType.UYU);
+    const usdCurrency = this.currencyService.get(CurrencyType.USD);
+    const eurCurrency = this.currencyService.get(CurrencyType.EUR);
+    const uyuCurrency = this.currencyService.get(CurrencyType.UYU);
 
     const usdNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
@@ -56,6 +57,10 @@ export class UserService {
     this.accountService.createAccount(uyuNewAccount);
 
     return user;
+  };
+
+  public get = (email: string): User | null => {
+    return this.userRepository.getUser(email);
   };
 }
 

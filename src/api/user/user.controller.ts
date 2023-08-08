@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.services';
 import { User } from '../../models';
 import constants from '../../constants';
 import UnauthorizedError from '../../customErrors/unauthorizedError';
+import NotFoundError from '../../customErrors/notFoundError';
 
 export class UserController {
   private userService;
@@ -42,9 +43,10 @@ export class UserController {
   };
 
   public getUser = async (req: Request, res: Response) => {
-    const user = req.user as User;
-    if (req.params.id !== user.id) {
-      throw new UnauthorizedError('Invalid user');
+    const user = this.userService.getById(req.params.id);
+
+    if (!user) {
+      throw new NotFoundError('Not found');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

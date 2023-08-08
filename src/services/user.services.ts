@@ -63,6 +63,10 @@ export class UserService implements IService<SignUp, User> {
     return this.userRepository.getUser(email);
   };
 
+  public getById = (id: string): User | null => {
+    return this.userRepository.getUserById(id);
+  };
+
   public getUserAccounts = (userId: string): Account[] => {
     return this.accountService.getList(userId);
   };

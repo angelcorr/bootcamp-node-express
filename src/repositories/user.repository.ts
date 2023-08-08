@@ -19,6 +19,11 @@ export class UserRepository implements IRepository<NewUser, User> {
     const user = this.users.find((user) => user.email === email);
     return user || null;
   }
+
+  getUserById(id: string): User | null {
+    const user = this.users.find((user) => user.id === id);
+    return user || null;
+  }
 }
 
 export const userRepository = new UserRepository();

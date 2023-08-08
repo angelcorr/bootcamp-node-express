@@ -1,7 +1,7 @@
 export class Account {
   private id: string;
   private capital: number;
-  private userId: string;
+  public userId: string;
   private currencyId: number;
 
   constructor(id: string, capital: number, userId: string, currencyId: number) {

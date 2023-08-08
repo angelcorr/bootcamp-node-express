@@ -14,6 +14,11 @@ export class AccountRepository implements IRepository<NewAccount, Account> {
 
     return account;
   }
+
+  getUserAccount(userId: string): Account[] {
+    const accounts = this.accounts.filter((account) => account.userId === userId);
+    return accounts;
+  }
 }
 
 export const accountRepository = new AccountRepository();

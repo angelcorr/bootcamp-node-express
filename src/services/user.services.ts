@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { CurrencyType, SignUp, User } from '../models';
+import { Account, CurrencyType, SignUp, User } from '../models';
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
@@ -61,6 +61,10 @@ export class UserService implements IService<User> {
 
   public get = (email: string): User | null => {
     return this.userRepository.getUser(email);
+  };
+
+  public getUserAccounts = (userId: string): Account[] => {
+    return this.accountService.getAccounts(userId);
   };
 }
 

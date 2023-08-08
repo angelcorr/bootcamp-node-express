@@ -28,6 +28,13 @@ export class UserController {
     res.cookie('token', token);
     res.send({ token });
   };
+
+  public getUserAccount = async (req: Request, res: Response) => {
+    const user = req.user as User;
+    const userAccounts = this.userService.getUserAccounts(user.id);
+
+    res.send({ accounts: userAccounts });
+  };
 }
 
 export const userController = new UserController(services.userService);

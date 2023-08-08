@@ -12,6 +12,10 @@ export class AccountService {
   public createAccount = (usdNewAccount: NewAccount): Account => {
     return this.accountRepository.add(usdNewAccount);
   };
+
+  public getAccounts = (userId: string): Account[] => {
+    return this.accountRepository.getUserAccount(userId);
+  };
 }
 
 export const accountService = new AccountService(repositories.accountRepository);

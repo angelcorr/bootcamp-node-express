@@ -1,5 +1,9 @@
 import bcrypt from 'bcrypt';
+<<<<<<< HEAD
 import { Account, CurrencyType, SignUp, User, UserWithoutHash } from '../models';
+=======
+import { Account, CurrencyType, SignUp, User } from '../models';
+>>>>>>> 30c8931 (Create get user accounts endpoint)
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';

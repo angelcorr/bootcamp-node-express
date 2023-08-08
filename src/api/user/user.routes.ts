@@ -40,11 +40,7 @@ class UserRoutes {
       asyncHandler(this.userController.getUserAccounts),
     );
 
-    this.userRouter.get(
-      '/:id',
-      passport.authenticate('jwt', { session: false }),
-      asyncHandler(this.userController.getUser),
-    );
+    this.userRouter.get('/:id', asyncHandler(this.userController.getUser));
   }
 }
 

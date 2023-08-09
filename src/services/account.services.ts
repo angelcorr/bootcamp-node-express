@@ -21,10 +21,6 @@ export class AccountService implements IAccount {
   public getList = (userId: string): Account[] => {
     return this.accountRepository.getUserAccount(userId);
   };
-
-  public getAccounts = (userId: string): Account[] => {
-    return this.accountRepository.getUserAccount(userId);
-  };
 }
 
 export const accountService = new AccountService(repositories.accountRepository);

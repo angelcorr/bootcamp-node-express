@@ -1,4 +1,4 @@
-import { NewUser, User } from '../models';
+import { NewUser, User, UserWithoutHash } from '../models';
 import crypto from 'crypto';
 import IRepository from './repository.interface';
 
@@ -20,9 +20,13 @@ export class UserRepository implements IRepository<NewUser, User> {
     return user || null;
   }
 
-  getUserById(id: string): User | null {
+  getUserById(id: string): UserWithoutHash | null {
     const user = this.users.find((user) => user.id === id);
-    return user || null;
+    if (!user) return null;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashPassword, ...userData } = user;
+    return userData;
   }
 }
 

@@ -3,6 +3,7 @@ import env from '../config';
 import cookieParser from 'cookie-parser';
 import errorHandler from '../middlewares/errorHandler';
 import { userRouter } from './user/user.routes';
+import { exchangeRouter } from './exchange/exchange.routes';
 
 export class App {
   private app: express.Application = express();
@@ -25,6 +26,7 @@ export class App {
     });
 
     this.app.use('/users', userRouter.getRouter());
+    this.app.use('/exchanges', exchangeRouter.getRouter());
   }
 
   public start() {

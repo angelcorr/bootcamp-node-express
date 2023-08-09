@@ -71,10 +71,6 @@ export class UserService implements IService<SignUp, User> {
   public getUserAccounts = (userId: string): Account[] => {
     return this.accountService.getList(userId);
   };
-
-  public getAll = (): User[] => {
-    return this.userRepository.getAll();
-  };
 }
 
 export const userService: UserService = new UserService(

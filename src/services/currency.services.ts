@@ -10,15 +10,15 @@ export class CurrencyService implements IService<Currency, Currency> {
     this.currencyRepository = currencyRepository;
   }
 
-  public getOne = (code: string): Currency => {
+  public getByCode = (code: string): Currency => {
     return this.currencyRepository.getByCode(code);
   };
 
   public create = async (currency: Currency): Promise<Currency> => {
     return await this.currencyRepository.add(currency);
-  }
+  };
 
-  public getById = (id: number): Currency => {
+  public getOne = (id: string): Currency => {
     return this.currencyRepository.getCurrencyById(id);
   };
 }

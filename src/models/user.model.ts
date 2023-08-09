@@ -13,3 +13,5 @@ export class User {
     this.hashPassword = hashPassword;
   }
 }
+
+export type UserWithoutHash = Omit<User, 'hashPassword'>;

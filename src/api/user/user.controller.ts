@@ -49,9 +49,7 @@ export class UserController {
       throw new NotFoundError('Not found');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hashPassword, ...userResponse } = user;
-    res.send({ user: userResponse });
+    res.send({ user });
   };
 }
 

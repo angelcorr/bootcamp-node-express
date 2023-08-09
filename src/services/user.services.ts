@@ -32,9 +32,9 @@ export class UserService implements IService<SignUp, User> {
     const newUser = { lastName, firstName, email, hashPassword };
     const user = this.userRepository.add(newUser);
 
-    const usdCurrency = this.currencyService.getOne(CurrencyType.USD);
-    const eurCurrency = this.currencyService.getOne(CurrencyType.EUR);
-    const uyuCurrency = this.currencyService.getOne(CurrencyType.UYU);
+    const usdCurrency = this.currencyService.getByCode(CurrencyType.USD);
+    const eurCurrency = this.currencyService.getByCode(CurrencyType.EUR);
+    const uyuCurrency = this.currencyService.getByCode(CurrencyType.UYU);
 
     const usdNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,

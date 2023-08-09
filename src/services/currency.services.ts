@@ -16,9 +16,9 @@ export class CurrencyService implements IService<Currency, Currency> {
 
   public create = async (currency: Currency): Promise<Currency> => {
     return await this.currencyRepository.add(currency);
-  }
+  };
 
-  public getById = (id: number): Currency => {
+  public getOne = (id: string): Currency => {
     return this.currencyRepository.getCurrencyById(id);
   };
 

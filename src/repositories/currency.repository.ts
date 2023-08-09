@@ -36,7 +36,7 @@ export class CurrencyRepository implements IRepository<Currency, Currency> {
     if (!found) throw new Error(`Id not found: ${id}`);
 
     return found;
-  };
+  }
 
   public getAll = (): Currency[] => {
     return this.currencies;

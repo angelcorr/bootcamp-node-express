@@ -17,7 +17,7 @@ export class UserController {
     const { lastName, firstName, email, password } = req.body;
     const signUp = { lastName, firstName, email, password };
 
-    const newUser = await this.userService.createUser(signUp);
+    const newUser = await this.userService.create(signUp);
     res.status(200).send(newUser);
   };
 

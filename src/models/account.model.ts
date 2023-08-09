@@ -1,5 +1,5 @@
 export class Account {
-  private id: string;
+  public id: string;
   private capital: number;
   public userId: string;
   private currencyId: number;

@@ -1,19 +1,24 @@
 import { Account, NewAccount } from '../models';
 import { repositories } from '../repositories';
 import { AccountRepository } from '../repositories/account.repository';
+import IAccount from '../interfaces/account.interface';
 
-export class AccountService {
+export class AccountService implements IAccount<NewAccount, Account> {
   private accountRepository;
 
   constructor(accountRepository: AccountRepository) {
     this.accountRepository = accountRepository;
   }
 
-  public createAccount = (usdNewAccount: NewAccount): Account => {
-    return this.accountRepository.add(usdNewAccount);
+  public getOne = (id: string): Account | null => {
+    return this.accountRepository.getOne(id);
   };
 
-  public getAccounts = (userId: string): Account[] => {
+  public create = async (newAccount: NewAccount): Promise<Account> => {
+    return await this.accountRepository.add(newAccount);
+  };
+
+  public getList = (userId: string): Account[] => {
     return this.accountRepository.getUserAccount(userId);
   };
 }

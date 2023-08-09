@@ -19,24 +19,28 @@ export class CurrencyRepository implements IRepository<Currency, Currency> {
     return [usd, eur, uyu];
   }
 
-  add(currency: Currency): Currency {
+  public add = (currency: Currency): Currency => {
     this.currencies.push(currency);
     return currency;
-  }
+  };
 
-  getByCode(code: string): Currency {
+  public getByCode = (code: string): Currency => {
     const found = this.currencies.find((currency) => currency.code === code);
     if (!found) throw new Error(`Code not found: ${code}`);
 
     return found;
-  }
+  };
 
   getCurrencyById(id: string): Currency {
     const found = this.currencies.find((currency) => currency.id === id);
     if (!found) throw new Error(`Id not found: ${id}`);
 
     return found;
-  }
+  };
+
+  public getAll = (): Currency[] => {
+    return this.currencies;
+  };
 }
 
 export const currencyRepository = new CurrencyRepository();

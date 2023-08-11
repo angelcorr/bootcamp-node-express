@@ -3,7 +3,7 @@ import { repositories } from '../repositories';
 import { AccountRepository } from '../repositories/account.repository';
 import IAccount from '../interfaces/account.interface';
 
-export class AccountService implements IAccount<NewAccount, Account> {
+export class AccountService implements IAccount {
   private accountRepository;
 
   constructor(accountRepository: AccountRepository) {

@@ -37,7 +37,7 @@ class UserRoutes {
     this.userRouter.get(
       '/:id/accounts',
       passport.authenticate('jwt', { session: false }),
-      asyncHandler(this.userController.getUserAccount),
+      asyncHandler(this.userController.getUserAccounts),
     );
   }
 }

@@ -30,7 +30,7 @@ export class UserController {
     res.send({ token });
   };
 
-  public getUserAccount = async (req: Request, res: Response) => {
+  public getUserAccounts = async (req: Request, res: Response) => {
     const user = req.user as User;
     if (req.params.id !== user.id) {
       throw new UnauthorizedError('Invalid user');

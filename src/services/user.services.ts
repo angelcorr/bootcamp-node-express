@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Account, CurrencyType, User, UserWithoutHash } from '../models';
+import { Account, CurrencyType, User } from '../models';
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
@@ -7,6 +7,7 @@ import { currencyService, CurrencyService } from './currency.services';
 import { accountService, AccountService } from './account.services';
 import IService from '../interfaces/service.interface';
 import { SignUp } from '../dataTransferObjects/signUp.object';
+import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
 
 export class UserService implements IService<SignUp, User> {
   private userRepository;

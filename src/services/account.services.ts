@@ -1,7 +1,8 @@
-import { Account, NewAccount } from '../models';
+import { Account } from '../models';
 import { repositories } from '../repositories';
 import { AccountRepository } from '../repositories/account.repository';
 import IAccount from '../interfaces/account.interface';
+import { NewAccount } from '../dataTransferObjects/newAccount.object';
 
 export class AccountService implements IAccount {
   private accountRepository;

@@ -1,6 +1,5 @@
 import express from 'express';
 import { ExchangeController, exchangeController } from './exchange.controller';
-import passport from '../../middlewares/passport';
 
 class ExchangeRoutes {
   private exchangeController;
@@ -17,11 +16,7 @@ class ExchangeRoutes {
   }
 
   private setRoutes() {
-    this.exchangeRouter.get(
-      '/',
-      passport.authenticate('jwt', { session: false }),
-      this.exchangeController.getExchanges,
-    );
+    this.exchangeRouter.get('/', this.exchangeController.getExchanges);
   }
 }
 

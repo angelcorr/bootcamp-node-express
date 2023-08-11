@@ -28,7 +28,7 @@ export class App {
 
     this.app.use('/users', userRouter.getRouter());
     this.app.use('/exchanges', exchangeRouter.getRouter());
-    this.app.use('/transaction', transactionRouter.getRouter());
+    this.app.use('/transactions', transactionRouter.getRouter());
   }
 
   public start() {

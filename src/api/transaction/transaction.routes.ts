@@ -2,9 +2,9 @@ import express from 'express';
 import { TransactionController, transactionController } from './transaction.controller';
 import passport from '../../middlewares/passport';
 import validationBodyHandler from '../../middlewares/validationBodyHandler';
-import { newTransactionSchema } from '../../models';
+import { newTransactionSchema } from '../../dataTransferObjects/newTransaction.object';
 
-class ExchangeRoutes {
+class TransactionRoutes {
   private transactionController;
   private transactionRouter;
 
@@ -28,4 +28,4 @@ class ExchangeRoutes {
   }
 }
 
-export const transactionRouter = new ExchangeRoutes(transactionController);
+export const transactionRouter = new TransactionRoutes(transactionController);

@@ -1,6 +1,8 @@
-import { NewUser, User, UserWithoutHash } from '../models';
 import crypto from 'crypto';
+import { User } from '../models';
 import IRepository from './repository.interface';
+import { NewUser } from '../dataTransferObjects/newUser.object';
+import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
 
 export class UserRepository implements IRepository<NewUser, User> {
   users: User[] = [];

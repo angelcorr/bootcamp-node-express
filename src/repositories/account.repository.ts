@@ -1,6 +1,7 @@
-import { Account, NewAccount } from '../models';
+import { Account } from '../models';
 import crypto from 'crypto';
 import IRepository from './repository.interface';
+import { NewAccount } from '../dataTransferObjects/newAccount.object';
 
 export class AccountRepository implements IRepository<NewAccount, Account> {
   accounts: Account[] = [];

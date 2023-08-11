@@ -1,6 +1,6 @@
 import IService from '../interfaces/service.interface';
 import { Transaction } from '../models';
-import { NewTransaction } from '../models/newTransaction.model';
+import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
 import { repositories } from '../repositories';
 import { TransactionRepository } from '../repositories/transaction.repository';
 

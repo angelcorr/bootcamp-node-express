@@ -3,7 +3,6 @@ import { z } from 'zod';
 export type NewTransaction = {
   sourceAccountId: string;
   deliverAccountId: string;
-  time: Date;
   description: string;
   amount: number;
   currencyId: string;
@@ -13,7 +12,6 @@ export type NewTransaction = {
 export const newTransactionSchema = z.object({
   sourceAccountId: z.string(),
   deliverAccountId: z.string(),
-  time: z.date(),
   description: z.string(),
   amount: z.number(),
   currencyId: z.string(),

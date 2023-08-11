@@ -10,12 +10,10 @@ export class TransactionController {
   }
 
   public createTransaction = (req: Request, res: Response) => {
-    const { sourceAccountId, deliverAccountId, time, description, amount, currencyId, exchangeDate } =
-      req.body;
+    const { sourceAccountId, deliverAccountId, description, amount, currencyId, exchangeDate } = req.body;
     const transactionData = {
       sourceAccountId,
       deliverAccountId,
-      time,
       description,
       amount,
       currencyId,

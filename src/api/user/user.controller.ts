@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.services';
 import { User } from '../../models';
 import constants from '../../constants';
 import UnauthorizedError from '../../customErrors/unauthorizedError';
+import NotFoundError from '../../customErrors/notFoundError';
 
 export class UserController {
   private userService;
@@ -39,6 +40,16 @@ export class UserController {
     const userAccounts = this.userService.getUserAccounts(user.id);
 
     res.send({ accounts: userAccounts });
+  };
+
+  public getUser = async (req: Request, res: Response) => {
+    const user = this.userService.getById(req.params.id);
+
+    if (!user) {
+      throw new NotFoundError('Not found');
+    }
+
+    res.send({ user });
   };
 }
 

@@ -21,6 +21,10 @@ export class CurrencyService implements IService<Currency, Currency> {
   public getOne = (id: string): Currency => {
     return this.currencyRepository.getCurrencyById(id);
   };
+
+  public getAll = (): Currency[] => {
+    return this.currencyRepository.getAll();
+  };
 }
 
 export const currencyService = new CurrencyService(repositories.currencyRepository);

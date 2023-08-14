@@ -32,7 +32,7 @@ const jwtStrategyOptions = {
 const jwtStrategy = new JwtStrategy(jwtStrategyOptions, (jwtPayload, done) => {
   const user = services.userService.getOne(jwtPayload.email);
   if (!user) {
-    done(new UnauthorizedError('The email or password are incorrect'));
+    done(new UnauthorizedError('Invalid token'));
   } else {
     done(null, user);
   }

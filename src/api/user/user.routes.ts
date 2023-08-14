@@ -33,6 +33,12 @@ class UserRoutes {
       passport.authenticate('local', { session: false }),
       asyncHandler(this.userController.login),
     );
+
+    this.userRouter.get(
+      '/:id/accounts',
+      passport.authenticate('jwt', { session: false }),
+      asyncHandler(this.userController.getUserAccounts),
+    );
   }
 }
 

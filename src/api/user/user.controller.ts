@@ -4,6 +4,7 @@ import { services } from '../../services';
 import { UserService } from '../../services/user.services';
 import { User } from '../../models';
 import constants from '../../constants';
+import UnauthorizedError from '../../customErrors/unauthorizedError';
 
 export class UserController {
   private userService;
@@ -16,7 +17,7 @@ export class UserController {
     const { lastName, firstName, email, password } = req.body;
     const signUp = { lastName, firstName, email, password };
 
-    const newUser = await this.userService.createUser(signUp);
+    const newUser = await this.userService.create(signUp);
     res.status(200).send(newUser);
   };
 
@@ -27,6 +28,17 @@ export class UserController {
     const token = jwt.sign({ id, email }, constants.JWT_SECRET, { expiresIn: '1h' });
     res.cookie('token', token);
     res.send({ token });
+  };
+
+  public getUserAccounts = async (req: Request, res: Response) => {
+    const user = req.user as User;
+    if (req.params.id !== user.id) {
+      throw new UnauthorizedError('Invalid user');
+    }
+
+    const userAccounts = this.userService.getUserAccounts(user.id);
+
+    res.send({ accounts: userAccounts });
   };
 }
 

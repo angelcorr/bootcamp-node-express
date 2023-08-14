@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
-import { CurrencyType, SignUp, User } from '../models';
+import { Account, CurrencyType, SignUp, User } from '../models';
 import { repositories } from '../repositories';
 import constants from '../constants';
 import { UserRepository } from '../repositories/user.repository';
 import { currencyService, CurrencyService } from './currency.services';
 import { accountService, AccountService } from './account.services';
-import IService from './service.interface';
+import IService from '../interfaces/service.interface';
 
-export class UserService implements IService<User> {
+export class UserService implements IService<SignUp, User> {
   private userRepository;
   private currencyService;
   private accountService;
@@ -22,7 +22,7 @@ export class UserService implements IService<User> {
     this.accountService = accountService;
   }
 
-  public createUser = async (signUp: SignUp): Promise<User> => {
+  public create = async (signUp: SignUp): Promise<User> => {
     const { lastName, firstName, email, password } = signUp;
 
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
@@ -31,36 +31,40 @@ export class UserService implements IService<User> {
     const newUser = { lastName, firstName, email, hashPassword };
     const user = this.userRepository.add(newUser);
 
-    const usdCurrency = this.currencyService.get(CurrencyType.USD);
-    const eurCurrency = this.currencyService.get(CurrencyType.EUR);
-    const uyuCurrency = this.currencyService.get(CurrencyType.UYU);
+    const usdCurrency = this.currencyService.getOne(CurrencyType.USD);
+    const eurCurrency = this.currencyService.getOne(CurrencyType.EUR);
+    const uyuCurrency = this.currencyService.getOne(CurrencyType.UYU);
 
     const usdNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
       userId: user.id,
       currencyId: usdCurrency.id,
     };
-    this.accountService.createAccount(usdNewAccount);
+    this.accountService.create(usdNewAccount);
 
     const eurNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
       userId: user.id,
       currencyId: eurCurrency.id,
     };
-    this.accountService.createAccount(eurNewAccount);
+    this.accountService.create(eurNewAccount);
 
     const uyuNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
       userId: user.id,
       currencyId: uyuCurrency.id,
     };
-    this.accountService.createAccount(uyuNewAccount);
+    this.accountService.create(uyuNewAccount);
 
     return user;
   };
 
-  public get = (email: string): User | null => {
+  public getOne = (email: string): User | null => {
     return this.userRepository.getUser(email);
+  };
+
+  public getUserAccounts = (userId: string): Account[] => {
+    return this.accountService.getList(userId);
   };
 }
 

@@ -13,7 +13,7 @@ export const newTransactionSchema = z.object({
   sourceAccountId: z.string(),
   deliverAccountId: z.string(),
   description: z.string(),
-  amount: z.number(),
+  amount: z.number().positive(),
   currencyId: z.string(),
   exchangeDate: z.date(),
 });

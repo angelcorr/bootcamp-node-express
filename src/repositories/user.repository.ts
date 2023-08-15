@@ -29,8 +29,7 @@ export class UserRepository implements IRepository<NewUser, User> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hashPassword, ...userData } = user;
     return userData;
-  }
-
+  };
 }
 
 export const userRepository = new UserRepository();

@@ -9,8 +9,8 @@ export class ExchangeController {
     this.exchangeService = exchangeService;
   }
 
-  public getExchanges = (req: Request, res: Response) => {
-    const exchanges = this.exchangeService.getAll();
+  public getExchanges = async (req: Request, res: Response) => {
+    const exchanges = await this.exchangeService.getAll();
     res.status(200).send({ exchanges });
   };
 }

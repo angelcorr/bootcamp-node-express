@@ -6,6 +6,7 @@ import { userRouter } from './user/user.routes';
 import { exchangeRouter } from './exchange/exchange.routes';
 import { transactionRouter } from './transaction/transaction.routes';
 import passport from 'passport';
+import '../integration/cronJob';
 
 export class App {
   private app: express.Application = express();

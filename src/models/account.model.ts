@@ -12,6 +12,11 @@ export class Account {
   }
 }
 
+export enum accountTransactionType {
+  add = 'add',
+  subtract = 'subtract',
+}
+
 export enum CurrencyType {
   USD = 'USD',
   EUR = 'EUR',

@@ -1,8 +1,8 @@
 export class Account {
   public id: string;
-  private capital: number;
+  public capital: number;
   public userId: string;
-  private currencyId: string;
+  public currencyId: string;
 
   constructor(id: string, capital: number, userId: string, currencyId: string) {
     this.id = id;

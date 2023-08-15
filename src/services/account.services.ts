@@ -11,7 +11,7 @@ export class AccountService implements IAccount {
     this.accountRepository = accountRepository;
   }
 
-  public getOne = (id: string): Account | null => {
+  public getOne = (id: string): Account => {
     return this.accountRepository.getOne(id);
   };
 
@@ -21,6 +21,21 @@ export class AccountService implements IAccount {
 
   public getList = (userId: string): Account[] => {
     return this.accountRepository.getUserAccount(userId);
+  };
+
+  public updateAccount = (amount: number, id: string, type: string) => {
+    const { capital } = this.getOne(id);
+
+    let newCapital;
+    if (type === 'add') {
+      newCapital = capital + amount;
+    } else if (type === 'subtract') {
+      newCapital = capital - amount;
+    } else {
+      throw new Error(`Unsupported type: ${type}`);
+    }
+
+    this.accountRepository.updateCapital(newCapital, id);
   };
 }
 

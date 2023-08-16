@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import errorHandler from '../middlewares/errorHandler';
 import { userRouter } from './user/user.routes';
 import { exchangeRouter } from './exchange/exchange.routes';
+import { transactionRouter } from './transaction/transaction.routes';
+import passport from 'passport';
 
 export class App {
   private app: express.Application = express();
@@ -26,7 +28,12 @@ export class App {
     });
 
     this.app.use('/users', userRouter.getRouter());
-    this.app.use('/exchanges', exchangeRouter.getRouter());
+    this.app.use('/exchanges', passport.authenticate('jwt', { session: false }), exchangeRouter.getRouter());
+    this.app.use(
+      '/transactions',
+      passport.authenticate('jwt', { session: false }),
+      transactionRouter.getRouter(),
+    );
   }
 
   public start() {

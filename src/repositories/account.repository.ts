@@ -2,6 +2,7 @@ import { Account } from '../models';
 import crypto from 'crypto';
 import IRepository from './repository.interface';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
+import NotFoundError from '../customErrors/notFoundError';
 
 export class AccountRepository implements IRepository<NewAccount, Account> {
   accounts: Account[] = [];
@@ -19,12 +20,21 @@ export class AccountRepository implements IRepository<NewAccount, Account> {
   public getUserAccount = (userId: string): Account[] => {
     const accounts = this.accounts.filter((account) => account.userId === userId);
     return accounts;
-  }
+  };
 
-  getOne(id: string): Account | null {
+  public getOne = (id: string): Account => {
     const oneAccount = this.accounts.find((account) => account.id === id);
-    return oneAccount || null;
-  }
+    if (!oneAccount) throw new NotFoundError(`Id not found: ${id}`);
+
+    return oneAccount;
+  };
+
+  public updateCapital = (newCapital: number, id: string) => {
+    const account = this.accounts.find((account) => account.id === id);
+    if (!account) throw new NotFoundError(`Id not found: ${id}`);
+
+    account.capital = newCapital;
+  };
 }
 
 export const accountRepository = new AccountRepository();

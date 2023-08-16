@@ -1,11 +1,11 @@
 export class Transaction {
-  private id: string;
+  public id: string;
   private sourceAccountId: string;
   private deliverAccountId: string;
   private time: Date;
   private description: string;
   private amount: number;
-  private currencyId: number;
+  private currencyId: string;
   private exchangeDate: Date;
 
   constructor(
@@ -15,7 +15,7 @@ export class Transaction {
     time: Date,
     description: string,
     amount: number,
-    currencyId: number,
+    currencyId: string,
     exchangeDate: Date,
   ) {
     this.id = id;

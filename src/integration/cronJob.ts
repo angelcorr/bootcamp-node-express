@@ -8,8 +8,9 @@ import { services } from '../services';
 
 cron.schedule('00 06 * * *', async () => {
   const { data } = await axios.get(`${constants.API_URL}/latest?access_key=${env.ACCESS_KEY}`);
-  if (!data) {
-    throw new Error('Could no process the request. Try again.');
+  if (!data.success || Object.keys(data).length === 0) {
+    console.log('data: ', data); // This console.log is to reflect the error on the console.
+    throw new Error('Could not process the request. Try again.');
   }
 
   const usdCurrency = currencyService.getByCode(CurrencyType.USD);

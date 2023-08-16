@@ -14,8 +14,8 @@ export class ExchangeService {
     return this.exchangeRepository.getAll();
   };
 
-  public update = (data: NewExchanges) => {
-    this.exchangeRepository.update(data);
+  public add = (data: NewExchanges) => {
+    this.exchangeRepository.add(data);
   };
 }
 

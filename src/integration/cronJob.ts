@@ -8,6 +8,9 @@ import { services } from '../services';
 
 cron.schedule('00 06 * * *', async () => {
   const { data } = await axios.get(`${constants.API_URL}/latest?access_key=${env.ACCESS_KEY}`);
+  if (!data) {
+    throw new Error('Could no process the request. Try again.');
+  }
 
   const usdCurrency = currencyService.getByCode(CurrencyType.USD);
   const eurCurrency = currencyService.getByCode(CurrencyType.EUR);
@@ -18,5 +21,5 @@ cron.schedule('00 06 * * *', async () => {
   const usdExchange = new Exchange(usdCurrency.id, date, data.rates.UYU / data.rates.USD);
   const uyuExchange = new Exchange(uyuCurrency.id, date, 1);
 
-  services.exchangeService.update({ eurExchange, usdExchange, uyuExchange });
+  services.exchangeService.add({ eurExchange, usdExchange, uyuExchange });
 });

@@ -1,7 +1,7 @@
 export class Exchange {
-  private currencyId: string;
-  private date: Date;
-  private rate: number;
+  public currencyId: string;
+  public date: Date;
+  public rate: number;
 
   constructor(currencyId: string, date: Date, rate: number) {
     this.currencyId = currencyId;

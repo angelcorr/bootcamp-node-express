@@ -1,6 +1,7 @@
 import express, { json, urlencoded } from 'express';
 import env from '../config';
 import cookieParser from 'cookie-parser';
+import 'reflect-metadata';
 import errorHandler from '../middlewares/errorHandler';
 import { userRouter } from './user/user.routes';
 import { exchangeRouter } from './exchange/exchange.routes';

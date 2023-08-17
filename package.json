@@ -12,7 +12,9 @@
     "prepare": "husky install",
     "docker-compose:build": "docker compose build",
     "docker-compose:up": "source .env && docker compose up --build",
-    "docker-compose:terminal": "source .env && docker compose run --interactive --rm api bash"
+    "docker-compose:terminal": "source .env && docker compose run --interactive --rm api bash",
+    "migration:run": "typeorm-ts-node-commonjs migration:run --dataSource database/dataSource.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert --dataSource database/dataSource.ts"
   },
   "lint-staged": {
     "*.ts": [
@@ -40,6 +42,8 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "pg": "^8.11.2",
+    "typeorm": "^0.3.17",
     "zod": "^3.21.4"
   },
   "devDependencies": {

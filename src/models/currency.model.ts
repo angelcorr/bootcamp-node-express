@@ -9,3 +9,9 @@ export class Currency {
     this.code = code;
   }
 }
+
+export enum CurrencyType {
+  USD = 'USD',
+  EUR = 'EUR',
+  UYU = 'UYU',
+}

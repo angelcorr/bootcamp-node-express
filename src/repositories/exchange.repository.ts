@@ -1,20 +1,14 @@
+import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
 import { Exchange } from '../models';
 import IRepository from './repository.interface';
 
-export class ExchangeRepository implements IRepository<Exchange, Exchange> {
-  exchanges: Exchange[] = this.exchangeSeed();
+export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
+  exchanges: Exchange[] = [];
 
-  exchangeSeed() {
-    const first = new Exchange(1, new Date(), 0.543);
-    const second = new Exchange(3, new Date(), 12);
-    const third = new Exchange(3, new Date(), 11.5);
+  public add = (data: NewExchanges): Exchange => {
+    this.exchanges.push(data.eurExchange, data.usdExchange, data.uyuExchange);
 
-    return [first, second, third];
-  }
-
-  public add = (exchange: Exchange) => {
-    this.exchanges.push(exchange);
-    return exchange;
+    return data.uyuExchange;
   };
 
   public getAll = (): Exchange[] => {

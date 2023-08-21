@@ -10,6 +10,7 @@ export const envVarsSchema = z.object({
   POSTGRES_PASSWORD: z.string(),
   POSTGRES_DB: z.string(),
   POSTGRES_HOST: z.string(),
+  POSTGRES_PORT: z.preprocess((port) => parseInt(port as string, 10), z.number().positive().max(10000)),
 });
 
 export type envVarsSchemaType = z.infer<typeof envVarsSchema>;

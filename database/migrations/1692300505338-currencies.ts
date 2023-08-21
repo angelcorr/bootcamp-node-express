@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
 export class Currencies1692300505338 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -22,6 +22,14 @@ export class Currencies1692300505338 implements MigrationInterface {
         ],
       }),
       true,
+    );
+
+    await queryRunner.createIndex(
+      'currencies',
+      new TableIndex({
+        name: 'currency_index',
+        columnNames: ['id'],
+      }),
     );
   }
 

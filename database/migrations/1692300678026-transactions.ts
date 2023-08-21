@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class Transactions1692300678026 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -45,6 +46,13 @@ export class Transactions1692300678026 implements MigrationInterface {
       true,
     );
 
+    await queryRunner.createIndex(
+      'transactions',
+      new TableIndex({
+        name: 'transaction_index',
+        columnNames: ['id'],
+      }),
+    );
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({

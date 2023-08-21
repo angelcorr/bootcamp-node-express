@@ -1,4 +1,3 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class Transactions1692300678026 implements MigrationInterface {
@@ -53,12 +52,13 @@ export class Transactions1692300678026 implements MigrationInterface {
         columnNames: ['id'],
       }),
     );
+
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
         columnNames: ['source_account_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'accounts',
         onDelete: 'CASCADE',
       }),
     );
@@ -68,7 +68,7 @@ export class Transactions1692300678026 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['deliver_account_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'users',
+        referencedTableName: 'accounts',
         onDelete: 'CASCADE',
       }),
     );

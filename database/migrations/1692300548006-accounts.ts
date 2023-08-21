@@ -1,4 +1,3 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class Accounts1692300548006 implements MigrationInterface {
@@ -11,6 +10,7 @@ export class Accounts1692300548006 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isUnique: true,
           },
           {
             name: 'capital',
@@ -36,6 +36,7 @@ export class Accounts1692300548006 implements MigrationInterface {
         columnNames: ['id'],
       }),
     );
+
     await queryRunner.createForeignKey(
       'accounts',
       new TableForeignKey({

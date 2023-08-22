@@ -3,7 +3,7 @@ import { UserController, userController } from './user.controller';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
 import passport from '../../middlewares/passport';
 import validationBodyHandler from '../../middlewares/validationBodyHandler';
-import { loginSchema } from '../../models/login.model';
+import { loginSchema } from '../../dataTransferObjects/login.object';
 import { signUpSchema } from '../../dataTransferObjects/signUp.object';
 
 class UserRoutes {

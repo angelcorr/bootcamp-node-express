@@ -12,11 +12,11 @@ export class Transactions1692300678026 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'source_account_id',
+            name: 'sourceAccountId',
             type: 'uuid',
           },
           {
-            name: 'deliver_account_id',
+            name: 'deliverAccountId',
             type: 'uuid',
           },
           {
@@ -33,11 +33,11 @@ export class Transactions1692300678026 implements MigrationInterface {
             type: 'decimal',
           },
           {
-            name: 'currency_id',
+            name: 'currencyId',
             type: 'varchar',
           },
           {
-            name: 'exchange_date',
+            name: 'exchangeDate',
             type: 'date',
           },
         ],
@@ -48,7 +48,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createIndex(
       'transactions',
       new TableIndex({
-        name: 'transaction_index',
+        name: 'transactionIndex',
         columnNames: ['id'],
       }),
     );
@@ -56,7 +56,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['source_account_id'],
+        columnNames: ['sourceAccountId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'accounts',
         onDelete: 'CASCADE',
@@ -66,7 +66,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['deliver_account_id'],
+        columnNames: ['deliverAccountId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'accounts',
         onDelete: 'CASCADE',
@@ -76,8 +76,8 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['exchange_date', 'currency_id'],
-        referencedColumnNames: ['date', 'currency_id'],
+        columnNames: ['exchangeDate', 'currencyId'],
+        referencedColumnNames: ['date', 'currencyId'],
         referencedTableName: 'exchanges',
       }),
     );

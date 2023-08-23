@@ -7,7 +7,7 @@ export class Exchanges1692300629914 implements MigrationInterface {
         name: 'exchanges',
         columns: [
           {
-            name: 'currency_id',
+            name: 'currencyId',
             type: 'varchar',
             isPrimary: true,
           },
@@ -28,15 +28,15 @@ export class Exchanges1692300629914 implements MigrationInterface {
     await queryRunner.createIndex(
       'exchanges',
       new TableIndex({
-        name: 'exchange_index',
-        columnNames: ['currency_id', 'date'],
+        name: 'exchangeIndex',
+        columnNames: ['currencyId', 'date'],
       }),
     );
 
     await queryRunner.createForeignKey(
       'exchanges',
       new TableForeignKey({
-        columnNames: ['currency_id'],
+        columnNames: ['currencyId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'currencies',
         onDelete: 'CASCADE',

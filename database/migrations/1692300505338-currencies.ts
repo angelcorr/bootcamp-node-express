@@ -27,7 +27,7 @@ export class Currencies1692300505338 implements MigrationInterface {
     await queryRunner.createIndex(
       'currencies',
       new TableIndex({
-        name: 'currency_index',
+        name: 'currencyIndex',
         columnNames: ['id'],
       }),
     );

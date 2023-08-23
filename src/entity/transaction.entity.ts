@@ -7,10 +7,10 @@ export class Transaction {
   @PrimaryColumn({ type: 'uuid' })
   public id: string;
 
-  @Column({ name: 'source_account_id' })
+  @Column()
   private sourceAccountId: string;
 
-  @Column({ name: 'deliver_account_id' })
+  @Column()
   private deliverAccountId: string;
 
   @Column()
@@ -22,18 +22,18 @@ export class Transaction {
   @Column('decimal')
   private amount: number;
 
-  @Column({ name: 'currency_id' })
+  @Column()
   private currencyId: string;
 
-  @Column({ name: 'exchange_date', unique: false })
+  @Column({ unique: false })
   private exchangeDate: Date;
 
-  @ManyToOne(() => Account, (account) => account.transactions)
-  source_account_: string;
+  @ManyToOne(() => Account, (account) => account.sourceTransaction)
+  sourceAccount: Account;
 
-  @ManyToOne(() => Account, (account) => account.transactionsTwo)
-  delivery_account_: string;
+  @ManyToOne(() => Account, (account) => account.deliverTransaction)
+  deliveryAccount: Account;
 
-  @ManyToOne(() => Exchange, (exchange) => exchange.currency_)
+  @ManyToOne(() => Exchange, (exchange) => exchange.currency)
   exchange: Exchange;
 }

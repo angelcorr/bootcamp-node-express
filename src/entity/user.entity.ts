@@ -6,16 +6,16 @@ export class User {
   @PrimaryColumn({ type: 'uuid' })
   public id: string;
 
-  @Column({ name: 'first_name' })
+  @Column()
   public firstName: string;
 
-  @Column({ name: 'last_name' })
+  @Column()
   public lastName: string;
 
   @Column({ unique: true })
   public email: string;
 
-  @Column({ name: 'hash_password' })
+  @Column()
   public hashPassword: string;
 
   @OneToMany(() => Account, (account) => account.user_)

@@ -12,11 +12,11 @@ export class User1692300468896 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'first_name',
+            name: 'firstName',
             type: 'varchar',
           },
           {
-            name: 'last_name',
+            name: 'lastName',
             type: 'varchar',
           },
           {
@@ -24,7 +24,7 @@ export class User1692300468896 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'hash_password',
+            name: 'hashPassword',
             type: 'varchar',
           },
         ],

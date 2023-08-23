@@ -4,7 +4,7 @@ import { Transaction } from './transaction.entity';
 
 @Entity('exchanges')
 export class Exchange {
-  @PrimaryColumn({ name: 'currency_id' })
+  @PrimaryColumn()
   public currencyId: string;
 
   @PrimaryColumn()
@@ -13,8 +13,8 @@ export class Exchange {
   @Column()
   public rate: number;
 
-  @ManyToOne(() => Currency, (currency) => currency.exchange_)
-  currency_: string;
+  @ManyToOne(() => Currency, (currency) => currency.exchange)
+  currency: Currency;
 
   @OneToMany(() => Transaction, (transaction) => transaction.exchange)
   transactions: Transaction[];

@@ -12,16 +12,16 @@ export class Account extends BaseEntity {
   public capital: number;
 
   @ManyToOne(() => User, (user) => user.accounts)
-  user_: string;
+  user: User;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.source_account_)
-  transactions: Transaction[];
+  @OneToMany(() => Transaction, (transaction) => transaction.sourceAccount)
+  sourceTransaction: Transaction[];
 
-  @OneToMany(() => Transaction, (transaction) => transaction.delivery_account_)
-  transactionsTwo: Transaction[];
+  @OneToMany(() => Transaction, (transaction) => transaction.deliveryAccount)
+  deliverTransaction: Transaction[];
 
-  @ManyToOne(() => Currency, (currency) => currency.account_)
-  currency_: string;
+  @ManyToOne(() => Currency, (currency) => currency.account)
+  currency: string;
 }
 
 export enum accountTransactionType {

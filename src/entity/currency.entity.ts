@@ -13,11 +13,11 @@ export class Currency {
   @Column()
   public code: string;
 
-  @OneToMany(() => Account, (account) => account.currency_)
-  account_: string;
+  @OneToMany(() => Account, (account) => account.currency)
+  account: Account[];
 
-  @OneToMany(() => Exchange, (exchanges) => exchanges.currency_)
-  exchange_: string;
+  @OneToMany(() => Exchange, (exchanges) => exchanges.currency)
+  exchange: Exchange;
 }
 
 export enum CurrencyType {

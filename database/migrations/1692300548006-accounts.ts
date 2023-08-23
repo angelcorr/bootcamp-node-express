@@ -17,11 +17,11 @@ export class Accounts1692300548006 implements MigrationInterface {
             type: 'decimal',
           },
           {
-            name: 'user_id',
+            name: 'userId',
             type: 'uuid',
           },
           {
-            name: 'currency_id',
+            name: 'currencyId',
             type: 'varchar',
           },
         ],
@@ -32,7 +32,7 @@ export class Accounts1692300548006 implements MigrationInterface {
     await queryRunner.createIndex(
       'accounts',
       new TableIndex({
-        name: 'account_index',
+        name: 'accountIndex',
         columnNames: ['id'],
       }),
     );
@@ -40,7 +40,7 @@ export class Accounts1692300548006 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'accounts',
       new TableForeignKey({
-        columnNames: ['user_id'],
+        columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'CASCADE',
@@ -50,7 +50,7 @@ export class Accounts1692300548006 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'accounts',
       new TableForeignKey({
-        columnNames: ['currency_id'],
+        columnNames: ['currencyId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'currencies',
         onDelete: 'CASCADE',

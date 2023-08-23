@@ -1,4 +1,4 @@
-import { Exchange } from '../models';
+import { Exchange } from '../entity';
 
 export type NewExchanges = {
   usdExchange: Exchange;

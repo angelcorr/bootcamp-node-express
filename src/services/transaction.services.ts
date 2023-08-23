@@ -1,7 +1,7 @@
 import IService from '../interfaces/service.interface';
-import { Transaction, accountTransactionType } from '../models';
-import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
+import { Transaction, accountTransactionType } from '../entity';
 import { repositories } from '../repositories';
+import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { AccountService, accountService } from './account.services';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
@@ -17,7 +17,7 @@ export class TransactionService implements IService<NewTransaction, Transaction>
 
   public create = async (newTransaction: NewTransaction): Promise<Transaction> => {
     const { sourceAccountId, amount, deliverAccountId } = newTransaction;
-    const sourceAccountData = this.accountService.getOne(sourceAccountId);
+    const sourceAccountData = await this.accountService.getOne(sourceAccountId);
 
     if (sourceAccountData.capital < amount) {
       throw new UnprocessableContentError('Insufficient funds');
@@ -29,8 +29,10 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     return this.transactionRepository.add(newTransaction);
   };
 
-  public getOne = (id: string): Transaction | null => {
-    return this.transactionRepository.getById(id);
+  public getOne = async (id: string): Promise<Transaction> => {
+    const transaction = await this.transactionRepository.getById(id);
+
+    return transaction;
   };
 }
 

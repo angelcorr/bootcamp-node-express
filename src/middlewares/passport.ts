@@ -9,7 +9,7 @@ import constants from '../constants';
 const localStrategy = new LocalStrategy(
   { usernameField: 'email', passwordField: 'password' },
   async (email: string, password: string, done) => {
-    const user = services.userService.getOne(email);
+    const user = await services.userService.getOne(email);
 
     if (!user) {
       done(new UnauthorizedError('The email or password are incorrect'));

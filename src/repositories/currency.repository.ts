@@ -1,45 +1,33 @@
-import { Currency, CurrencyType } from '../models';
+import { AppDataSource } from '../../database/dataSource';
+import { Currency } from '../entity';
 import IRepository from './repository.interface';
 
 export class CurrencyRepository implements IRepository<Currency, Currency> {
-  currencies: Currency[] = this.currencySeed();
+  public add = async (currencyData: Currency): Promise<Currency> => {
+    const currencyCreated = AppDataSource.getRepository(Currency).create(currencyData);
 
-  currencySeed() {
-    const usdType = 'United States dollar';
-    const usdCode = CurrencyType.USD;
-    const usd = new Currency('1', usdType, usdCode);
-
-    const eurType = 'Euro';
-    const eurCode = CurrencyType.EUR;
-    const eur = new Currency('2', eurType, eurCode);
-
-    const uyuType = 'Uruguayan Peso';
-    const uyuCode = CurrencyType.UYU;
-    const uyu = new Currency('3', uyuType, uyuCode);
-    return [usd, eur, uyu];
-  }
-
-  public add = (currency: Currency): Currency => {
-    this.currencies.push(currency);
+    const currency = await AppDataSource.getRepository(Currency).save(currencyCreated);
     return currency;
   };
 
-  public getByCode = (code: string): Currency => {
-    const found = this.currencies.find((currency) => currency.code === code);
-    if (!found) throw new Error(`Code not found: ${code}`);
+  public getByCode = async (code: string): Promise<Currency> => {
+    const currency = await AppDataSource.getRepository(Currency).findOneBy({ code });
+    if (!currency) throw new Error(`Code not found: ${code}`);
+
+    return currency;
+  };
+
+  public getCurrencyById = async (id: string): Promise<Currency> => {
+    const found = await AppDataSource.getRepository(Currency).findOneBy({ id });
+    if (!found) throw new Error(`Id not found: ${id}`);
 
     return found;
   };
 
-  getCurrencyById(id: string): Currency {
-    const found = this.currencies.find((currency) => currency.id === id);
-    if (!found) throw new Error(`Id not found: ${id}`);
+  public getAll = async (): Promise<Currency[]> => {
+    const allCurrencies = await AppDataSource.getRepository(Currency).find();
 
-    return found;
-  }
-
-  public getAll = (): Currency[] => {
-    return this.currencies;
+    return allCurrencies;
   };
 }
 

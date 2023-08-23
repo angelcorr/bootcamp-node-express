@@ -1,16 +1,18 @@
+import { AppDataSource } from '../../database/dataSource';
+import NotFoundError from '../customErrors/notFoundError';
 import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
-import { Transaction } from '../models';
+import { Transaction } from '../entity';
 import IRepository from './repository.interface';
 
 export class TransactionRepository implements IRepository<NewTransaction, Transaction> {
   transactions: Transaction[] = [];
 
-  public add = (newTransaction: NewTransaction): Transaction => {
+  public add = (newTransaction: NewTransaction): Promise<Transaction> => {
     const { sourceAccountId, deliverAccountId, description, amount, currencyId, exchangeDate } =
       newTransaction;
     const id = crypto.randomUUID();
     const time = new Date();
-    const transaction = new Transaction(
+    const transactionCreated = AppDataSource.getRepository(Transaction).create({
       id,
       sourceAccountId,
       deliverAccountId,
@@ -19,15 +21,18 @@ export class TransactionRepository implements IRepository<NewTransaction, Transa
       amount,
       currencyId,
       exchangeDate,
-    );
-    this.transactions.push(transaction);
+    });
+
+    const transaction = AppDataSource.getRepository(Transaction).save(transactionCreated);
     return transaction;
   };
 
-  public getById = (id: string): Transaction | null => {
-    const transaction = this.transactions.find((transaction) => transaction.id === id);
+  public getById = async (id: string): Promise<Transaction> => {
+    const transaction = await AppDataSource.getRepository(Transaction).findOne({ where: { id: id } });
 
-    if (!transaction) return null;
+    if (!transaction) {
+      throw new NotFoundError(`Id not found: ${id}`);
+    }
 
     return transaction;
   };

@@ -15,7 +15,6 @@ export class Exchanges1692300629914 implements MigrationInterface {
             name: 'date',
             type: 'date',
             isPrimary: true,
-            isUnique: true,
           },
           {
             name: 'rate',

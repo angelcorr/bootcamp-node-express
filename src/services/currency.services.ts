@@ -1,4 +1,4 @@
-import { Currency } from '../models';
+import { Currency } from '../entity';
 import { repositories } from '../repositories';
 import { CurrencyRepository } from '../repositories/currency.repository';
 import IService from '../interfaces/service.interface';
@@ -10,20 +10,16 @@ export class CurrencyService implements IService<Currency, Currency> {
     this.currencyRepository = currencyRepository;
   }
 
-  public getByCode = (code: string): Currency => {
-    return this.currencyRepository.getByCode(code);
+  public getOne = async (code: string): Promise<Currency> => {
+    return await this.currencyRepository.getByCode(code);
   };
 
   public create = async (currency: Currency): Promise<Currency> => {
     return await this.currencyRepository.add(currency);
   };
 
-  public getOne = (id: string): Currency => {
-    return this.currencyRepository.getCurrencyById(id);
-  };
-
-  public getAll = (): Currency[] => {
-    return this.currencyRepository.getAll();
+  public getAll = async (): Promise<Currency[]> => {
+    return await this.currencyRepository.getAll();
   };
 }
 

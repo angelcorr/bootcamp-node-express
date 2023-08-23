@@ -43,7 +43,7 @@ export class UserController {
   };
 
   public getUser = async (req: Request, res: Response) => {
-    const user = this.userService.getById(req.params.id);
+    const user = await this.userService.getById(req.params.id);
 
     if (!user) {
       throw new NotFoundError('Not found');

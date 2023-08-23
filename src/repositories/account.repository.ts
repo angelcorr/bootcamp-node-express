@@ -1,40 +1,43 @@
-import { Account } from '../models';
+import { Account } from '../entity';
 import crypto from 'crypto';
 import IRepository from './repository.interface';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
 import NotFoundError from '../customErrors/notFoundError';
+import { AppDataSource } from '../../database/dataSource';
 
 export class AccountRepository implements IRepository<NewAccount, Account> {
-  accounts: Account[] = [];
-
-  public add = (newAccount: NewAccount): Account => {
+  async add(newAccount: NewAccount): Promise<Account> {
     const { capital, userId, currencyId } = newAccount;
     const id = crypto.randomUUID();
-    const account = new Account(id, capital, userId, currencyId);
+    const accountCreated = AppDataSource.getRepository(Account).create({
+      id,
+      capital,
+      user_: userId,
+      currency_: currencyId,
+    });
+    const account = await AppDataSource.getRepository(Account).save(accountCreated);
+    return account;
+  }
 
-    this.accounts.push(account);
+  async getUserAccounts(userId: string): Promise<Account[]> {
+    const accounts = await AppDataSource.getRepository(Account).findBy({ user_: userId });
+    return accounts;
+  }
+
+  async getOne(id: string): Promise<Account> {
+    const oneAccount = await AppDataSource.getRepository(Account).findOneBy({ id });
+    if (!oneAccount) throw new NotFoundError(`Id not found: ${id}`);
+    return oneAccount;
+  }
+
+  async updateCapital(newCapital: number, id: string) {
+    const account = await AppDataSource.getRepository(Account).findOneBy({ id });
+    if (!account) throw new NotFoundError(`Id not found: ${id}`);
+    account.capital = newCapital;
+    await AppDataSource.getRepository(Account).save(account);
 
     return account;
-  };
-
-  public getUserAccount = (userId: string): Account[] => {
-    const accounts = this.accounts.filter((account) => account.userId === userId);
-    return accounts;
-  };
-
-  public getOne = (id: string): Account => {
-    const oneAccount = this.accounts.find((account) => account.id === id);
-    if (!oneAccount) throw new NotFoundError(`Id not found: ${id}`);
-
-    return oneAccount;
-  };
-
-  public updateCapital = (newCapital: number, id: string) => {
-    const account = this.accounts.find((account) => account.id === id);
-    if (!account) throw new NotFoundError(`Id not found: ${id}`);
-
-    account.capital = newCapital;
-  };
+  }
 }
 
 export const accountRepository = new AccountRepository();

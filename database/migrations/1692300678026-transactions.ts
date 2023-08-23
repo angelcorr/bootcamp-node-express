@@ -76,17 +76,8 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['currency_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'currencies',
-      }),
-    );
-
-    await queryRunner.createForeignKey(
-      'transactions',
-      new TableForeignKey({
-        columnNames: ['exchange_date'],
-        referencedColumnNames: ['date'],
+        columnNames: ['exchange_date', 'currency_id'],
+        referencedColumnNames: ['date', 'currency_id'],
         referencedTableName: 'exchanges',
       }),
     );

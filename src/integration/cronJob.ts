@@ -2,10 +2,9 @@ import cron from 'node-cron';
 import axios from 'axios';
 import constants from '../constants';
 import env from '../config';
-import { CurrencyType, Exchange } from '../entity';
+import { CurrencyType } from '../entity';
 import { currencyService } from '../services/currency.services';
 import { services } from '../services';
-import { AppDataSource } from '../../database/dataSource';
 
 cron.schedule('00 8 * * *', async () => {
   const { data } = await axios.get(`${constants.API_URL}/latest?access_key=${env.ACCESS_KEY}`);
@@ -22,21 +21,23 @@ cron.schedule('00 8 * * *', async () => {
   const usdRate = data.rates.UYU / data.rates.USD;
 
   const date = new Date(data.date);
-  const eurExchange = AppDataSource.getRepository(Exchange).create({
+  const eurExchange = {
     currencyId: eurCurrency.id,
     date: date,
     rate: data.rates.UYU,
-  });
-  const usdExchange = AppDataSource.getRepository(Exchange).create({
+  };
+  const usdExchange = {
     currencyId: usdCurrency.id,
     date: date,
     rate: usdRate,
-  });
-  const uyuExchange = AppDataSource.getRepository(Exchange).create({
+  };
+  const uyuExchange = {
     currencyId: uyuCurrency.id,
     date: date,
     rate: 1,
-  });
+  };
 
-  services.exchangeService.add({ eurExchange, usdExchange, uyuExchange });
+  services.exchangeService.add(eurExchange);
+  services.exchangeService.add(usdExchange);
+  services.exchangeService.add(uyuExchange);
 });

@@ -41,22 +41,22 @@ export class UserService implements IService<SignUp, User> {
 
     const usdNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: usdCurrency.id,
+      user,
+      currency: usdCurrency,
     };
     await this.accountService.create(usdNewAccount);
 
     const eurNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: eurCurrency.id,
+      user,
+      currency: eurCurrency,
     };
     await this.accountService.create(eurNewAccount);
 
     const uyuNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: uyuCurrency.id,
+      user,
+      currency: uyuCurrency,
     };
     await this.accountService.create(uyuNewAccount);
 
@@ -64,13 +64,10 @@ export class UserService implements IService<SignUp, User> {
   };
 
   public getOne = async (email: string): Promise<User> => {
-    const find = await AppDataSource.getRepository(User).findOneBy({ email: email });
-
-    if (!find) {
+    const user = await AppDataSource.getRepository(User).findOneBy({ email });
+    if (!user) {
       throw new NotFoundError(`Not found: ${email}`);
     }
-
-    const user = AppDataSource.getRepository(User).create(find);
 
     return user;
   };
@@ -79,8 +76,8 @@ export class UserService implements IService<SignUp, User> {
     return await this.userRepository.getUserById(id);
   };
 
-  public getUserAccounts = async (userId: string): Promise<Account[]> => {
-    const accounts = await this.accountService.getList(userId);
+  public getUserAccounts = async (user: User): Promise<Account[]> => {
+    const accounts = await this.accountService.getList(user);
     return accounts;
   };
 }

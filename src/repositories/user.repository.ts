@@ -40,7 +40,6 @@ export class UserRepository implements IRepository<NewUser, User> {
 
   public getUserById = async (id: string): Promise<UserWithoutHash> => {
     const user = await AppDataSource.getRepository(User).findOneBy({ id });
-    console.log('user: ', user);
     if (!user) {
       throw new NotFoundError(`Not found`);
     }

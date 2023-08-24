@@ -1,4 +1,4 @@
-import { Account } from '../entity';
+import { Account, User } from '../entity';
 import { AccountRepository, accountRepository } from '../repositories/account.repository';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
 import IAccount from '../interfaces/account.interface';
@@ -19,8 +19,8 @@ export class AccountService implements IAccount {
     return account;
   };
 
-  public getList = async (userId: string): Promise<Account[]> => {
-    const accounts = await this.accountRepository.getUserAccounts(userId);
+  public getList = async (user: User): Promise<Account[]> => {
+    const accounts = await this.accountRepository.getUserAccounts(user);
     return accounts;
   };
 

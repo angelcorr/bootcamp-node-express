@@ -5,13 +5,15 @@ import IRepository from './repository.interface';
 
 export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
   public add = async (exchangeData: NewExchanges): Promise<Exchange> => {
-    const { usdExchange, uyuExchange, eurExchange } = exchangeData;
+    const exchangeCreated = AppDataSource.getRepository(Exchange).create({
+      currencyId: exchangeData.currencyId,
+      date: exchangeData.date,
+      rate: exchangeData.rate,
+    });
 
-    await AppDataSource.getRepository(Exchange).save(usdExchange);
-    await AppDataSource.getRepository(Exchange).save(uyuExchange);
-    const uyuExchangeSaved = await AppDataSource.getRepository(Exchange).save(eurExchange);
+    const exchange = await AppDataSource.getRepository(Exchange).save(exchangeCreated);
 
-    return uyuExchangeSaved;
+    return exchange;
   };
 
   public getAll = async (): Promise<Exchange[]> => {

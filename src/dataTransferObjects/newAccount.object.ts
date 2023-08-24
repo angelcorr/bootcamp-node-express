@@ -1,7 +1,7 @@
-import { User } from '../entity';
+import { Currency, User } from '../entity';
 
 export type NewAccount = {
   capital: number;
   user: User;
-  currencyId: string;
+  currency: Currency;
 };

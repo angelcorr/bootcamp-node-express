@@ -1,4 +1,4 @@
-import { Account } from '../entity';
+import { Account, User } from '../entity';
 import crypto from 'crypto';
 import IRepository from './repository.interface';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
@@ -7,20 +7,23 @@ import { AppDataSource } from '../../database/dataSource';
 
 export class AccountRepository implements IRepository<NewAccount, Account> {
   async add(newAccount: NewAccount): Promise<Account> {
-    const { capital, userId, currencyId } = newAccount;
+    const { capital, user, currency } = newAccount;
     const id = crypto.randomUUID();
     const accountCreated = AppDataSource.getRepository(Account).create({
       id,
       capital,
-      user_: userId,
-      currency_: currencyId,
+      user,
+      currency,
     });
     const account = await AppDataSource.getRepository(Account).save(accountCreated);
     return account;
   }
 
-  async getUserAccounts(userId: string): Promise<Account[]> {
-    const accounts = await AppDataSource.getRepository(Account).findBy({ user_: userId });
+  async getUserAccounts(user: User): Promise<Account[]> {
+    const accounts = await AppDataSource.getRepository(Account).find({
+      relations: { user: true },
+      where: { user: { id: user.id } },
+    });
     return accounts;
   }
 

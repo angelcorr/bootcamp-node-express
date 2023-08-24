@@ -21,7 +21,7 @@ export class Account extends BaseEntity {
   deliverTransaction: Transaction[];
 
   @ManyToOne(() => Currency, (currency) => currency.account)
-  currency: string;
+  currency: Currency;
 }
 
 export enum accountTransactionType {

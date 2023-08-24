@@ -17,7 +17,7 @@ export class Currency {
   account: Account[];
 
   @OneToMany(() => Exchange, (exchanges) => exchanges.currency)
-  exchange: Exchange;
+  exchange: Exchange[];
 }
 
 export enum CurrencyType {

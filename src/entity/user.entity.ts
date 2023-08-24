@@ -18,6 +18,6 @@ export class User {
   @Column()
   public hashPassword: string;
 
-  @OneToMany(() => Account, (account) => account.user_)
-  accounts: Account;
+  @OneToMany(() => Account, (account) => account.user)
+  accounts: Account[];
 }

@@ -1,5 +1,7 @@
+import { User } from '../entity';
+
 export type NewAccount = {
   capital: number;
-  userId: string;
+  user: User;
   currencyId: string;
 };

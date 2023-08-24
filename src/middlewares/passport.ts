@@ -29,8 +29,8 @@ const jwtStrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: constants.JWT_SECRET,
 };
-const jwtStrategy = new JwtStrategy(jwtStrategyOptions, (jwtPayload, done) => {
-  const user = services.userService.getOne(jwtPayload.email);
+const jwtStrategy = new JwtStrategy(jwtStrategyOptions, async (jwtPayload, done) => {
+  const user = await services.userService.getOne(jwtPayload.email);
   if (!user) {
     done(new UnauthorizedError('Invalid token'));
   } else {

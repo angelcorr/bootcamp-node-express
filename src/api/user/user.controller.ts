@@ -36,8 +36,7 @@ export class UserController {
     if (req.params.id !== user.id) {
       throw new UnauthorizedError('Invalid user');
     }
-
-    const userAccounts = this.userService.getUserAccounts(user.id);
+    const userAccounts = await this.userService.getUserAccounts(user);
 
     res.send({ accounts: userAccounts });
   };

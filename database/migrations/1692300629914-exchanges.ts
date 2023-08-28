@@ -8,7 +8,7 @@ export class Exchanges1692300629914 implements MigrationInterface {
         columns: [
           {
             name: 'currencyId',
-            type: 'varchar',
+            type: 'integer',
             isPrimary: true,
           },
           {

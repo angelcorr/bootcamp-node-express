@@ -22,22 +22,22 @@ cron.schedule('00 8 * * *', async () => {
 
   const date = new Date(data.date);
   const eurExchange = {
-    currencyId: eurCurrency.id,
+    currencyId: eurCurrency,
     date: date,
     rate: data.rates.UYU,
   };
   const usdExchange = {
-    currencyId: usdCurrency.id,
+    currencyId: usdCurrency,
     date: date,
     rate: usdRate,
   };
   const uyuExchange = {
-    currencyId: uyuCurrency.id,
+    currencyId: uyuCurrency,
     date: date,
     rate: 1,
   };
 
-  services.exchangeService.add(eurExchange);
-  services.exchangeService.add(usdExchange);
-  services.exchangeService.add(uyuExchange);
+  await services.exchangeService.add(eurExchange);
+  await services.exchangeService.add(usdExchange);
+  await services.exchangeService.add(uyuExchange);
 });

@@ -17,6 +17,10 @@ export class ExchangeService {
   public add = async (data: NewExchanges): Promise<Exchange> => {
     return await this.exchangeRepository.add(data);
   };
+
+  public getExchange = async (exchangeDate: Date, currencyId: number): Promise<Exchange> => {
+    return await this.exchangeRepository.getOne(exchangeDate, currencyId);
+  };
 }
 
 export const exchangeService = new ExchangeService(repositories.exchangeRepository);

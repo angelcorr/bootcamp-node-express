@@ -10,6 +10,8 @@ export class Transactions1692300678026 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'uuid',
           },
           {
             name: 'sourceAccountId',
@@ -34,7 +36,7 @@ export class Transactions1692300678026 implements MigrationInterface {
           },
           {
             name: 'currencyId',
-            type: 'varchar',
+            type: 'integer',
           },
           {
             name: 'exchangeDate',

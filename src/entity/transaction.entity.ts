@@ -1,17 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Account } from './account.entity';
 import { Exchange } from './exchange.entity';
 
 @Entity('transactions')
 export class Transaction {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   public id: string;
-
-  @Column()
-  private sourceAccountId: string;
-
-  @Column()
-  private deliverAccountId: string;
 
   @Column()
   private time: Date;
@@ -22,18 +16,14 @@ export class Transaction {
   @Column('decimal')
   private amount: number;
 
-  @Column()
-  private currencyId: string;
-
-  @Column({ unique: false })
-  private exchangeDate: Date;
-
   @ManyToOne(() => Account, (account) => account.sourceTransaction)
   sourceAccount: Account;
 
   @ManyToOne(() => Account, (account) => account.deliverTransaction)
-  deliveryAccount: Account;
+  deliverAccount: Account;
 
-  @ManyToOne(() => Exchange, (exchange) => exchange.currency)
+  @ManyToOne(() => Exchange, (exchange) => exchange.transactions)
+  @JoinColumn({ name: 'currencyId', referencedColumnName: 'currencyId' })
+  @JoinColumn({ name: 'exchangeDate', referencedColumnName: 'date' })
   exchange: Exchange;
 }

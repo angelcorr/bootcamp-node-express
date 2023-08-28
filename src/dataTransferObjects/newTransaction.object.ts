@@ -5,7 +5,7 @@ export type NewTransaction = {
   deliverAccountId: string;
   description: string;
   amount: number;
-  currencyId: string;
+  currencyId: number;
   exchangeDate: Date;
 };
 
@@ -15,5 +15,4 @@ export const newTransactionSchema = z.object({
   description: z.string(),
   amount: z.number().positive(),
   currencyId: z.string(),
-  exchangeDate: z.date(),
 });

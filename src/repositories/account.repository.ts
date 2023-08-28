@@ -1,45 +1,34 @@
-import { Account, User } from '../entity';
-import crypto from 'crypto';
+import { Account } from '../entity';
 import IRepository from './repository.interface';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
 import NotFoundError from '../customErrors/notFoundError';
-import { AppDataSource } from '../../database/dataSource';
+import { DataSourceFunction } from '../../database/repository';
 
 export class AccountRepository implements IRepository<NewAccount, Account> {
   async add(newAccount: NewAccount): Promise<Account> {
     const { capital, user, currency } = newAccount;
-    const id = crypto.randomUUID();
-    const accountCreated = AppDataSource.getRepository(Account).create({
-      id,
+    const accountCreated = DataSourceFunction(Account).create({
       capital,
       user,
       currency,
     });
-    const account = await AppDataSource.getRepository(Account).save(accountCreated);
-    return account;
-  }
-
-  async getUserAccounts(user: User): Promise<Account[]> {
-    const accounts = await AppDataSource.getRepository(Account).find({
-      relations: { user: true },
-      where: { user: { id: user.id } },
-    });
-    return accounts;
+    const account = await DataSourceFunction(Account).save(accountCreated);
+    return account as Account;
   }
 
   async getOne(id: string): Promise<Account> {
-    const oneAccount = await AppDataSource.getRepository(Account).findOneBy({ id });
+    const oneAccount = await DataSourceFunction(Account).findOneBy({ id });
     if (!oneAccount) throw new NotFoundError(`Id not found: ${id}`);
-    return oneAccount;
+    return oneAccount as Account;
   }
 
-  async updateCapital(newCapital: number, id: string) {
-    const account = await AppDataSource.getRepository(Account).findOneBy({ id });
+  async updateCapital(newCapital: number, id: string): Promise<Account> {
+    const account = await DataSourceFunction(Account).findOneBy({ id });
     if (!account) throw new NotFoundError(`Id not found: ${id}`);
     account.capital = newCapital;
-    await AppDataSource.getRepository(Account).save(account);
+    await DataSourceFunction(Account).save(account);
 
-    return account;
+    return account as Account;
   }
 }
 

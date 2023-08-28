@@ -1,40 +1,35 @@
-import { AppDataSource } from '../../database/dataSource';
+import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
-import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
+import { TransactionData } from '../dataTransferObjects/transactionData.object';
 import { Transaction } from '../entity';
 import IRepository from './repository.interface';
 
-export class TransactionRepository implements IRepository<NewTransaction, Transaction> {
+export class TransactionRepository implements IRepository<TransactionData, Transaction> {
   transactions: Transaction[] = [];
 
-  public add = (newTransaction: NewTransaction): Promise<Transaction> => {
-    const { sourceAccountId, deliverAccountId, description, amount, currencyId, exchangeDate } =
-      newTransaction;
-    const id = crypto.randomUUID();
-    const time = new Date();
-    const transactionCreated = AppDataSource.getRepository(Transaction).create({
-      id,
-      sourceAccountId,
-      deliverAccountId,
-      time,
+  public add = async (newTransaction: TransactionData): Promise<Transaction> => {
+    const { sourceAccountData, deliveryAccountData, description, amount, exchange } = newTransaction;
+    const transactionCreated = DataSourceFunction(Transaction).create({
+      sourceAccount: sourceAccountData,
+      deliverAccount: deliveryAccountData,
+      time: new Date(),
       description,
       amount,
-      currencyId,
-      exchangeDate,
+      exchange,
     });
 
-    const transaction = AppDataSource.getRepository(Transaction).save(transactionCreated);
-    return transaction;
+    const transaction = await DataSourceFunction(Transaction).save(transactionCreated);
+    return transaction as Transaction;
   };
 
   public getById = async (id: string): Promise<Transaction> => {
-    const transaction = await AppDataSource.getRepository(Transaction).findOne({ where: { id: id } });
+    const transaction = await DataSourceFunction(Transaction).findOne({ where: { id: id } });
 
     if (!transaction) {
       throw new NotFoundError(`Id not found: ${id}`);
     }
 
-    return transaction;
+    return transaction as Transaction;
   };
 }
 

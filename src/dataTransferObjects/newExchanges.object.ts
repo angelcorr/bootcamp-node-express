@@ -1,5 +1,7 @@
+import { Currency } from '../entity';
+
 export type NewExchanges = {
-  currencyId: string;
+  currencyId: Currency;
   date: Date;
   rate: number;
 };

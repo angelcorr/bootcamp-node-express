@@ -8,7 +8,6 @@ import { UserRepository } from '../repositories/user.repository';
 import IService from '../interfaces/service.interface';
 import { SignUp } from '../dataTransferObjects/signUp.object';
 import NotFoundError from '../customErrors/notFoundError';
-import { AppDataSource } from '../../database/dataSource';
 import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
 
 export class UserService implements IService<SignUp, User> {
@@ -31,8 +30,7 @@ export class UserService implements IService<SignUp, User> {
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const id = crypto.randomUUID();
-    const newUser = { id, lastName, firstName, email, hashPassword };
+    const newUser = { lastName, firstName, email, hashPassword };
     const user = await this.userRepository.add(newUser);
 
     const usdCurrency = await this.currencyService.getOne(CurrencyType.USD);
@@ -64,7 +62,7 @@ export class UserService implements IService<SignUp, User> {
   };
 
   public getOne = async (email: string): Promise<User> => {
-    const user = await AppDataSource.getRepository(User).findOneBy({ email });
+    const user = await this.userRepository.getUser(email);
     if (!user) {
       throw new NotFoundError(`Not found: ${email}`);
     }
@@ -76,8 +74,8 @@ export class UserService implements IService<SignUp, User> {
     return await this.userRepository.getUserById(id);
   };
 
-  public getUserAccounts = async (user: User): Promise<Account[]> => {
-    const accounts = await this.accountService.getList(user);
+  public getUserAccounts = async (id: string): Promise<Account[]> => {
+    const accounts = await this.userRepository.getList(id);
     return accounts;
   };
 }

@@ -1,9 +1,9 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Account } from './account.entity';
 
 @Entity('users')
 export class User {
-  @PrimaryColumn({ type: 'uuid' })
+  @PrimaryGeneratedColumn('uuid')
   public id: string;
 
   @Column()
@@ -18,6 +18,6 @@ export class User {
   @Column()
   public hashPassword: string;
 
-  @OneToMany(() => Account, (account) => account.user)
+  @OneToMany(() => Account, (account) => account.user, { cascade: true })
   accounts: Account[];
 }

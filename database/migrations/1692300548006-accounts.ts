@@ -11,6 +11,8 @@ export class Accounts1692300548006 implements MigrationInterface {
             type: 'uuid',
             isPrimary: true,
             isUnique: true,
+            isGenerated: true,
+            generationStrategy: 'uuid',
           },
           {
             name: 'capital',
@@ -22,7 +24,7 @@ export class Accounts1692300548006 implements MigrationInterface {
           },
           {
             name: 'currencyId',
-            type: 'varchar',
+            type: 'integer',
           },
         ],
       }),

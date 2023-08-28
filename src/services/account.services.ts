@@ -1,9 +1,9 @@
-import { Account, User } from '../entity';
+import { Account } from '../entity';
 import { AccountRepository, accountRepository } from '../repositories/account.repository';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
-import IAccount from '../interfaces/account.interface';
+import IService from '../interfaces/service.interface';
 
-export class AccountService implements IAccount {
+export class AccountService implements IService<NewAccount, Account> {
   private accountRepository;
   constructor(accountRepository: AccountRepository) {
     this.accountRepository = accountRepository;
@@ -19,24 +19,19 @@ export class AccountService implements IAccount {
     return account;
   };
 
-  public getList = async (user: User): Promise<Account[]> => {
-    const accounts = await this.accountRepository.getUserAccounts(user);
-    return accounts;
-  };
-
   public updateAccount = async (amount: number, id: string, type: string) => {
     const { capital } = await this.getOne(id);
 
     let newCapital;
     if (type === 'add') {
-      newCapital = capital + amount;
+      newCapital = +capital + +amount;
     } else if (type === 'subtract') {
-      newCapital = capital - amount;
+      newCapital = Number(capital - amount);
     } else {
       throw new Error(`Unsupported type: ${type}`);
     }
 
-    this.accountRepository.updateCapital(newCapital, id);
+    await this.accountRepository.updateCapital(newCapital, id);
   };
 }
 

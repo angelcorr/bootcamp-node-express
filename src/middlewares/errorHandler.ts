@@ -7,6 +7,7 @@ import BadRequestError from '../customErrors/BadRequestError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log('err: ', err);
   if (err instanceof NotFoundError) {
     res.status(404).send({ error: err.serializeErrors() });
     return;

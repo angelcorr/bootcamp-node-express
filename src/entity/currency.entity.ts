@@ -1,11 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Account } from './account.entity';
 import { Exchange } from './exchange.entity';
 
 @Entity('currencies')
 export class Currency {
-  @PrimaryColumn()
-  public id: string;
+  @PrimaryGeneratedColumn('increment')
+  public id: number;
 
   @Column()
   public type: string;
@@ -13,11 +13,11 @@ export class Currency {
   @Column()
   public code: string;
 
-  @OneToMany(() => Account, (account) => account.currency)
-  account: Account[];
+  @OneToMany(() => Account, (account) => account.currency, { cascade: true })
+  accounts: Account[];
 
-  @OneToMany(() => Exchange, (exchanges) => exchanges.currency)
-  exchange: Exchange[];
+  @OneToMany(() => Exchange, (exchanges) => exchanges.currency, { cascade: true })
+  exchanges: Exchange[];
 }
 
 export enum CurrencyType {

@@ -1,26 +1,38 @@
 import { Request, Response } from 'express';
 import { services } from '../../services';
 import { TransactionService } from '../../services/transaction.services';
-import { CurrencyService } from '../../services/currency.services';
+import { UserService } from '../../services/user.services';
+import UnauthorizedError from '../../customErrors/unauthorizedError';
+import { User } from '../../entity';
 
 export class TransactionController {
   private transactionService;
-  private currencyService;
+  private userService;
 
-  constructor(transactionService: TransactionService, currencyService: CurrencyService) {
+  constructor(transactionService: TransactionService, userService: UserService) {
     this.transactionService = transactionService;
-    this.currencyService = currencyService;
+    this.userService = userService;
   }
 
   public createTransaction = async (req: Request, res: Response) => {
-    const { sourceAccountId, deliverAccountId, description, amount, currencyId } = req.body;
+    const { sourceAccountId, deliverAccountId, description, amount } = req.body;
+    const { id } = req.user as User;
+    if (!id) {
+      throw new UnauthorizedError('You must log in');
+    }
+
+    const userAccounts = await this.userService.getUserAccounts(id);
+    const findSourceUserAccount = userAccounts.find((account) => account.id === sourceAccountId);
+
+    if (!findSourceUserAccount) {
+      throw new UnauthorizedError('Unauthorized');
+    }
+
     const transactionData = {
       sourceAccountId,
       deliverAccountId,
       description,
       amount,
-      currencyId,
-      exchangeDate: new Date(),
     };
     const transaction = await this.transactionService.create(transactionData);
     res.status(200).send({ transaction });
@@ -29,5 +41,5 @@ export class TransactionController {
 
 export const transactionController = new TransactionController(
   services.transactionService,
-  services.currencyService,
+  services.userService,
 );

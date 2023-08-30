@@ -23,25 +23,43 @@ export class TransactionService implements IService<NewTransaction, Transaction>
   }
 
   public create = async (newTransaction: NewTransaction): Promise<Transaction> => {
-    const { sourceAccountId, amount, deliverAccountId, currencyId, description, exchangeDate } =
-      newTransaction;
+    let newAmount: number;
+    const { sourceAccountId, amount, deliverAccountId, description } = newTransaction;
     const sourceAccountData = await this.accountService.getOne(sourceAccountId);
     const deliveryAccountData = await this.accountService.getOne(deliverAccountId);
-    const exchange = await this.exchangeService.getExchange(exchangeDate, currencyId);
+    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency);
+    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency);
+    newAmount = 1 * amount;
+
+    if (sourceAccountData.currency.id !== deliveryAccountData.currency.id) {
+      const dailyExchange = +sourceExchangeData.rate / +deliverExchangeData.rate;
+      newAmount = Number((+amount * dailyExchange).toFixed(3));
+    }
 
     if (sourceAccountData.capital < amount) {
       throw new UnprocessableContentError('Insufficient funds');
     }
 
-    await this.accountService.updateAccount(amount, sourceAccountId, accountTransactionType.subtract);
-    await this.accountService.updateAccount(amount, deliverAccountId, accountTransactionType.add);
+    const deliveryAccount = await this.accountService.updateAccount(
+      newAmount,
+      deliverAccountId,
+      accountTransactionType.add,
+    );
+    const sourceAccount = await this.accountService.updateAccount(
+      amount,
+      sourceAccountId,
+      accountTransactionType.subtract,
+    );
 
     return this.transactionRepository.add({
-      exchange,
-      sourceAccountData,
-      deliveryAccountData,
+      sourceAccountData: sourceAccount,
+      deliveryAccountData: deliveryAccount,
       description,
       amount,
+      sourceExchangeDate: sourceExchangeData,
+      deliverExchangeDate: sourceExchangeData,
+      sourceCurrencyId: sourceExchangeData,
+      deliveryCurrencyId: sourceExchangeData,
     });
   };
 

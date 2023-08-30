@@ -8,14 +8,26 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
   transactions: Transaction[] = [];
 
   public add = async (newTransaction: TransactionData): Promise<Transaction> => {
-    const { sourceAccountData, deliveryAccountData, description, amount, exchange } = newTransaction;
+    const {
+      sourceAccountData,
+      deliveryAccountData,
+      description,
+      amount,
+      sourceExchangeDate,
+      deliverExchangeDate,
+      sourceCurrencyId,
+      deliveryCurrencyId,
+    } = newTransaction;
     const transactionCreated = DataSourceFunction(Transaction).create({
       sourceAccount: sourceAccountData,
       deliverAccount: deliveryAccountData,
       time: new Date(),
       description,
       amount,
-      exchange,
+      sourceCurrencyId,
+      deliveryCurrencyId,
+      sourceExchangeDate,
+      deliverExchangeDate,
     });
 
     const transaction = await DataSourceFunction(Transaction).save(transactionCreated);

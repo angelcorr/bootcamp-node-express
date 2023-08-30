@@ -2,6 +2,7 @@ import express from 'express';
 import { TransactionController, transactionController } from './transaction.controller';
 import validationBodyHandler from '../../middlewares/validationBodyHandler';
 import { newTransactionSchema } from '../../dataTransferObjects/newTransaction.object';
+import asyncHandler from '../../middlewares/asyncErrorHandler';
 
 class TransactionRoutes {
   private transactionController;
@@ -21,7 +22,7 @@ class TransactionRoutes {
     this.transactionRouter.post(
       '/',
       validationBodyHandler(newTransactionSchema),
-      this.transactionController.createTransaction,
+      asyncHandler(this.transactionController.createTransaction),
     );
   }
 }

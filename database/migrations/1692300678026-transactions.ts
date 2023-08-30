@@ -35,12 +35,24 @@ export class Transactions1692300678026 implements MigrationInterface {
             type: 'decimal',
           },
           {
-            name: 'currencyId',
+            name: 'sourceCurrencyId',
             type: 'integer',
+            isNullable: true,
           },
           {
-            name: 'exchangeDate',
+            name: 'deliverCurrencyId',
+            type: 'integer',
+            isNullable: true,
+          },
+          {
+            name: 'sourceExchangeDate',
             type: 'date',
+            isNullable: true,
+          },
+          {
+            name: 'deliverExchangeDate',
+            type: 'date',
+            isNullable: true,
           },
         ],
       }),
@@ -78,7 +90,16 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['exchangeDate', 'currencyId'],
+        columnNames: ['sourceExchangeDate', 'sourceCurrencyId'],
+        referencedColumnNames: ['date', 'currencyId'],
+        referencedTableName: 'exchanges',
+      }),
+    );
+
+    await queryRunner.createForeignKey(
+      'transactions',
+      new TableForeignKey({
+        columnNames: ['deliverExchangeDate', 'deliverCurrencyId'],
         referencedColumnNames: ['date', 'currencyId'],
         referencedTableName: 'exchanges',
       }),

@@ -22,8 +22,13 @@ export class Transaction {
   @ManyToOne(() => Account, (account) => account.deliverTransaction)
   deliverAccount: Account;
 
-  @ManyToOne(() => Exchange, (exchange) => exchange.transactions)
-  @JoinColumn({ name: 'currencyId', referencedColumnName: 'currencyId' })
-  @JoinColumn({ name: 'exchangeDate', referencedColumnName: 'date' })
-  exchange: Exchange;
+  @ManyToOne(() => Exchange, (exchange) => exchange.transactionSource)
+  @JoinColumn({ name: 'sourceCurrencyId', referencedColumnName: 'currencyId' })
+  @JoinColumn({ name: 'sourceExchangeDate', referencedColumnName: 'date' })
+  sourceExchange: Exchange;
+
+  @ManyToOne(() => Exchange, (exchange) => exchange.transactionDeliver)
+  @JoinColumn({ name: 'deliverCurrencyId', referencedColumnName: 'currencyId' })
+  @JoinColumn({ name: 'deliverExchangeDate', referencedColumnName: 'date' })
+  deliverExchange: Exchange;
 }

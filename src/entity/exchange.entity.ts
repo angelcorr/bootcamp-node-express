@@ -17,6 +17,9 @@ export class Exchange {
   @JoinColumn({ name: 'currencyId' })
   currency: Currency;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.exchange, { cascade: true })
-  transactions: Transaction[];
+  @OneToMany(() => Transaction, (transaction) => transaction.sourceExchange, { cascade: true })
+  transactionSource: Transaction[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.deliverExchange, { cascade: true })
+  transactionDeliver: Transaction[];
 }

@@ -19,19 +19,19 @@ export class AccountService implements IService<NewAccount, Account> {
     return account;
   };
 
-  public updateAccount = async (amount: number, id: string, type: string) => {
+  public updateAccount = async (amount: number, id: string, type: string): Promise<Account> => {
     const { capital } = await this.getOne(id);
 
     let newCapital;
     if (type === 'add') {
       newCapital = +capital + +amount;
     } else if (type === 'subtract') {
-      newCapital = Number(capital - amount);
+      newCapital = +capital - amount;
     } else {
       throw new Error(`Unsupported type: ${type}`);
     }
 
-    await this.accountRepository.updateCapital(newCapital, id);
+    return await this.accountRepository.updateCapital(newCapital, id);
   };
 }
 

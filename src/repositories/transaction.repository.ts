@@ -13,10 +13,8 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       deliveryAccountData,
       description,
       amount,
-      sourceExchangeDate,
-      deliverExchangeDate,
-      sourceCurrencyId,
-      deliveryCurrencyId,
+      sourceExchangeData,
+      deliverExchangeData,
     } = newTransaction;
     const transactionCreated = DataSourceFunction(Transaction).create({
       sourceAccount: sourceAccountData,
@@ -24,10 +22,8 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       time: new Date(),
       description,
       amount,
-      sourceCurrencyId,
-      deliveryCurrencyId,
-      sourceExchangeDate,
-      deliverExchangeDate,
+      sourceExchangeData,
+      deliverExchangeData,
     });
 
     const transaction = await DataSourceFunction(Transaction).save(transactionCreated);

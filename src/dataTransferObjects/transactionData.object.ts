@@ -5,8 +5,6 @@ export type TransactionData = {
   deliveryAccountData: Account;
   description: string;
   amount: number;
-  sourceExchangeDate: Exchange;
-  deliverExchangeDate: Exchange;
-  sourceCurrencyId: Exchange;
-  deliveryCurrencyId: Exchange;
+  sourceExchangeData: Exchange;
+  deliverExchangeData: Exchange;
 };

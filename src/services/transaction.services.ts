@@ -27,9 +27,9 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     const { sourceAccountId, amount, deliverAccountId, description } = newTransaction;
     const sourceAccountData = await this.accountService.getOne(sourceAccountId);
     const deliveryAccountData = await this.accountService.getOne(deliverAccountId);
-    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency);
-    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency);
-    newAmount = 1 * amount;
+    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency.id);
+    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency.id);
+    newAmount = amount;
 
     if (sourceAccountData.currency.id !== deliveryAccountData.currency.id) {
       const dailyExchange = +sourceExchangeData.rate / +deliverExchangeData.rate;
@@ -56,10 +56,8 @@ export class TransactionService implements IService<NewTransaction, Transaction>
       deliveryAccountData: deliveryAccount,
       description,
       amount,
-      sourceExchangeDate: sourceExchangeData,
-      deliverExchangeDate: sourceExchangeData,
-      sourceCurrencyId: sourceExchangeData,
-      deliveryCurrencyId: sourceExchangeData,
+      sourceExchangeData,
+      deliverExchangeData,
     });
   };
 

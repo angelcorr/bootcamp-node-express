@@ -1,5 +1,5 @@
 import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
-import { Currency, Exchange } from '../entity';
+import { Exchange } from '../entity';
 import { repositories } from '../repositories';
 import { ExchangeRepository } from '../repositories/exchange.repository';
 
@@ -18,7 +18,7 @@ export class ExchangeService {
     return await this.exchangeRepository.add(data);
   };
 
-  public getExchange = async (currencyId: Currency): Promise<Exchange> => {
+  public getExchange = async (currencyId: number): Promise<Exchange> => {
     return await this.exchangeRepository.getOne(currencyId);
   };
 }

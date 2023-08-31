@@ -1,7 +1,7 @@
 import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
 import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
-import { Currency, Exchange } from '../entity';
+import { Exchange } from '../entity';
 import IRepository from './repository.interface';
 
 export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
@@ -22,15 +22,15 @@ export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
     return exchanges as Exchange[];
   };
 
-  public getOne = async (currency: Currency): Promise<Exchange> => {
-    const getExchange = await DataSourceFunction(Exchange).find({
-      where: { currency },
+  public getOne = async (currencyId: number): Promise<Exchange> => {
+    const getExchange = await DataSourceFunction(Exchange).findOne({
+      where: { currencyId },
       order: { date: 'DESC' },
     });
 
     if (!getExchange) throw new NotFoundError(`Exchange not found`);
 
-    return getExchange[0] as Exchange;
+    return getExchange as Exchange;
   };
 }
 

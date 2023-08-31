@@ -17,14 +17,14 @@ export class AccountRepository implements IRepository<NewAccount, Account> {
   }
 
   async getOne(id: string): Promise<Account> {
-    const oneAccount = await DataSourceFunction(Account).find({
+    const oneAccount = await DataSourceFunction(Account).findOne({
       where: { id },
       relations: {
         currency: true,
       },
     });
     if (!oneAccount) throw new NotFoundError(`Id not found: ${id}`);
-    return oneAccount[0] as Account;
+    return oneAccount as Account;
   }
 
   async updateCapital(newCapital: number, id: string): Promise<Account> {

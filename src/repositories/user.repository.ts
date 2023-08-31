@@ -1,34 +1,58 @@
-import crypto from 'crypto';
-import { User } from '../models';
 import IRepository from './repository.interface';
+import { Account, User } from '../entity';
 import { NewUser } from '../dataTransferObjects/newUser.object';
 import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
+import { DataSourceFunction } from '../../database/repository';
+import BadRequestError from '../customErrors/BadRequestError';
+import NotFoundError from '../customErrors/notFoundError';
 
 export class UserRepository implements IRepository<NewUser, User> {
-  users: User[] = [];
-
-  public add = (newUser: NewUser): User => {
+  public add = async (newUser: NewUser): Promise<User> => {
     const { firstName, lastName, email, hashPassword } = newUser;
-    const id = crypto.randomUUID();
-    const user = new User(id, firstName, lastName, email, hashPassword);
+    const getUsers = await DataSourceFunction(User).find();
+    const findEmailMatches = getUsers.find((user) => user.email === email.toLowerCase());
+    if (findEmailMatches) {
+      throw new BadRequestError('Bad request');
+    }
 
-    this.users.push(user);
+    const userCreated = DataSourceFunction(User).create({
+      firstName,
+      lastName,
+      email,
+      hashPassword,
+    });
 
-    return user;
+    const user = await DataSourceFunction(User).save(userCreated);
+
+    return user as User;
   };
 
-  public getUser = (email: string): User | null => {
-    const user = this.users.find((user) => user.email === email);
-    return user || null;
+  public getUser = async (email: string): Promise<User> => {
+    const user = await DataSourceFunction(User).findOne({ where: { email } });
+    if (!user) throw new NotFoundError('Not found');
+
+    return user as User;
   };
 
-  public getUserById = (id: string): UserWithoutHash | null => {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) return null;
+  public getUserById = async (id: string): Promise<UserWithoutHash> => {
+    const user = await DataSourceFunction(User).findOneBy({ id });
+    if (!user) throw new NotFoundError('Not found');
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hashPassword, ...userData } = user;
-    return userData;
+    return userData as UserWithoutHash;
+  };
+
+  public getList = async (id: string): Promise<Account[]> => {
+    const userAccounts = await DataSourceFunction(User).find({
+      where: { id },
+      relations: { accounts: true },
+      take: 1,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { accounts, ...userData } = userAccounts[0];
+    return accounts as Account[];
   };
 }
 

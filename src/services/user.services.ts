@@ -1,81 +1,87 @@
 import bcrypt from 'bcrypt';
-import { Account, CurrencyType, User } from '../models';
-import { repositories } from '../repositories';
+import { Account, CurrencyType, User } from '../entity';
 import constants from '../constants';
-import { UserRepository } from '../repositories/user.repository';
+import { repositories } from '../repositories';
 import { currencyService, CurrencyService } from './currency.services';
 import { accountService, AccountService } from './account.services';
+import { UserRepository } from '../repositories/user.repository';
 import IService from '../interfaces/service.interface';
 import { SignUp } from '../dataTransferObjects/signUp.object';
+import NotFoundError from '../customErrors/notFoundError';
 import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
 
 export class UserService implements IService<SignUp, User> {
-  private userRepository;
   private currencyService;
   private accountService;
+  private userRepository;
 
   constructor(
-    userRepository: UserRepository,
     currencyService: CurrencyService,
     accountService: AccountService,
+    userRepository: UserRepository,
   ) {
-    this.userRepository = userRepository;
     this.currencyService = currencyService;
     this.accountService = accountService;
+    this.userRepository = userRepository;
   }
 
   public create = async (signUp: SignUp): Promise<User> => {
     const { lastName, firstName, email, password } = signUp;
-
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
     const hashPassword = await bcrypt.hash(password, salt);
 
     const newUser = { lastName, firstName, email, hashPassword };
-    const user = this.userRepository.add(newUser);
+    const user = await this.userRepository.add(newUser);
 
-    const usdCurrency = this.currencyService.getByCode(CurrencyType.USD);
-    const eurCurrency = this.currencyService.getByCode(CurrencyType.EUR);
-    const uyuCurrency = this.currencyService.getByCode(CurrencyType.UYU);
+    const usdCurrency = await this.currencyService.getOne(CurrencyType.USD);
+    const eurCurrency = await this.currencyService.getOne(CurrencyType.EUR);
+    const uyuCurrency = await this.currencyService.getOne(CurrencyType.UYU);
 
     const usdNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: usdCurrency.id,
+      user,
+      currency: usdCurrency,
     };
-    this.accountService.create(usdNewAccount);
+    await this.accountService.create(usdNewAccount);
 
     const eurNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: eurCurrency.id,
+      user,
+      currency: eurCurrency,
     };
-    this.accountService.create(eurNewAccount);
+    await this.accountService.create(eurNewAccount);
 
     const uyuNewAccount = {
       capital: constants.DEFAULT_CAPITAL_AMOUNT,
-      userId: user.id,
-      currencyId: uyuCurrency.id,
+      user,
+      currency: uyuCurrency,
     };
-    this.accountService.create(uyuNewAccount);
+    await this.accountService.create(uyuNewAccount);
 
     return user;
   };
 
-  public getOne = (email: string): User | null => {
-    return this.userRepository.getUser(email);
+  public getOne = async (email: string): Promise<User> => {
+    const user = await this.userRepository.getUser(email);
+    if (!user) {
+      throw new NotFoundError(`Not found: ${email}`);
+    }
+
+    return user;
   };
 
-  public getById = (id: string): UserWithoutHash | null => {
-    return this.userRepository.getUserById(id);
+  public getById = async (id: string): Promise<UserWithoutHash> => {
+    return await this.userRepository.getUserById(id);
   };
 
-  public getUserAccounts = (userId: string): Account[] => {
-    return this.accountService.getList(userId);
+  public getUserAccounts = async (id: string): Promise<Account[]> => {
+    const accounts = await this.userRepository.getList(id);
+    return accounts;
   };
 }
 
 export const userService: UserService = new UserService(
-  repositories.userRepository,
   currencyService,
   accountService,
+  repositories.userRepository,
 );

@@ -3,6 +3,7 @@ import NotFoundError from '../customErrors/notFoundError';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
 import { ZodError } from 'zod';
 import UnauthorizedError from '../customErrors/unauthorizedError';
+import BadRequestError from '../customErrors/BadRequestError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -23,6 +24,11 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 
   if (err instanceof UnauthorizedError) {
     res.status(401).send({ error: err.serializeErrors() });
+    return;
+  }
+
+  if (err instanceof BadRequestError) {
+    res.status(400).send({ error: err.serializeErrors() });
     return;
   }
 

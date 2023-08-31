@@ -1,45 +1,33 @@
-import { Currency, CurrencyType } from '../models';
+import { DataSourceFunction } from '../../database/repository';
+import { Currency } from '../entity';
 import IRepository from './repository.interface';
 
 export class CurrencyRepository implements IRepository<Currency, Currency> {
-  currencies: Currency[] = this.currencySeed();
+  public add = async (currencyData: Currency): Promise<Currency> => {
+    const currencyCreated = DataSourceFunction(Currency).create(currencyData);
 
-  currencySeed() {
-    const usdType = 'United States dollar';
-    const usdCode = CurrencyType.USD;
-    const usd = new Currency('1', usdType, usdCode);
-
-    const eurType = 'Euro';
-    const eurCode = CurrencyType.EUR;
-    const eur = new Currency('2', eurType, eurCode);
-
-    const uyuType = 'Uruguayan Peso';
-    const uyuCode = CurrencyType.UYU;
-    const uyu = new Currency('3', uyuType, uyuCode);
-    return [usd, eur, uyu];
-  }
-
-  public add = (currency: Currency): Currency => {
-    this.currencies.push(currency);
-    return currency;
+    const currency = await DataSourceFunction(Currency).save(currencyCreated);
+    return currency as Currency;
   };
 
-  public getByCode = (code: string): Currency => {
-    const found = this.currencies.find((currency) => currency.code === code);
-    if (!found) throw new Error(`Code not found: ${code}`);
+  public getByCode = async (code: string): Promise<Currency> => {
+    const currency = await DataSourceFunction(Currency).findOneBy({ code });
+    if (!currency) throw new Error(`Code not found: ${code}`);
 
-    return found;
+    return currency as Currency;
   };
 
-  getCurrencyById(id: string): Currency {
-    const found = this.currencies.find((currency) => currency.id === id);
+  public getCurrencyById = async (id: number): Promise<Currency> => {
+    const found = await DataSourceFunction(Currency).findOneBy({ id });
     if (!found) throw new Error(`Id not found: ${id}`);
 
-    return found;
-  }
+    return found as Currency;
+  };
 
-  public getAll = (): Currency[] => {
-    return this.currencies;
+  public getAll = async (): Promise<Currency[]> => {
+    const allCurrencies = await DataSourceFunction(Currency).find();
+
+    return allCurrencies as Currency[];
   };
 }
 

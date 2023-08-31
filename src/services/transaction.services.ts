@@ -1,37 +1,75 @@
 import IService from '../interfaces/service.interface';
-import { Transaction, accountTransactionType } from '../models';
-import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
+import { Transaction, accountTransactionType } from '../entity';
 import { repositories } from '../repositories';
+import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
 import { TransactionRepository } from '../repositories/transaction.repository';
 import { AccountService, accountService } from './account.services';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
+import { ExchangeService, exchangeService } from './exchange.services';
 
 export class TransactionService implements IService<NewTransaction, Transaction> {
   private transactionRepository;
   private accountService;
+  private exchangeService;
 
-  constructor(transactionRepository: TransactionRepository, accountService: AccountService) {
+  constructor(
+    transactionRepository: TransactionRepository,
+    accountService: AccountService,
+    exchangeService: ExchangeService,
+  ) {
     this.transactionRepository = transactionRepository;
     this.accountService = accountService;
+    this.exchangeService = exchangeService;
   }
 
   public create = async (newTransaction: NewTransaction): Promise<Transaction> => {
-    const { sourceAccountId, amount, deliverAccountId } = newTransaction;
-    const sourceAccountData = this.accountService.getOne(sourceAccountId);
+    let newAmount: number;
+    const { sourceAccountId, amount, deliverAccountId, description } = newTransaction;
+    const sourceAccountData = await this.accountService.getOne(sourceAccountId);
+    const deliveryAccountData = await this.accountService.getOne(deliverAccountId);
+    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency.id);
+    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency.id);
+    newAmount = amount;
+
+    if (sourceAccountData.currency.id !== deliveryAccountData.currency.id) {
+      const dailyExchange = +sourceExchangeData.rate / +deliverExchangeData.rate;
+      newAmount = Number((+amount * dailyExchange).toFixed(3));
+    }
 
     if (sourceAccountData.capital < amount) {
       throw new UnprocessableContentError('Insufficient funds');
     }
 
-    this.accountService.updateAccount(amount, sourceAccountId, accountTransactionType.subtract);
-    this.accountService.updateAccount(amount, deliverAccountId, accountTransactionType.add);
+    const deliveryAccount = await this.accountService.updateAccount(
+      newAmount,
+      deliverAccountId,
+      accountTransactionType.add,
+    );
+    const sourceAccount = await this.accountService.updateAccount(
+      amount,
+      sourceAccountId,
+      accountTransactionType.subtract,
+    );
 
-    return this.transactionRepository.add(newTransaction);
+    return this.transactionRepository.add({
+      sourceAccountData: sourceAccount,
+      deliveryAccountData: deliveryAccount,
+      description,
+      amount,
+      sourceExchangeData,
+      deliverExchangeData,
+    });
   };
 
-  public getOne = (id: string): Transaction | null => {
-    return this.transactionRepository.getById(id);
+  public getOne = async (id: string): Promise<Transaction> => {
+    const transaction = await this.transactionRepository.getById(id);
+
+    return transaction;
   };
 }
 
-export const transactionService = new TransactionService(repositories.transactionRepository, accountService);
+export const transactionService = new TransactionService(
+  repositories.transactionRepository,
+  accountService,
+  exchangeService,
+);

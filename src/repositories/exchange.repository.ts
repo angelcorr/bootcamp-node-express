@@ -1,18 +1,36 @@
+import { DataSourceFunction } from '../../database/repository';
+import NotFoundError from '../customErrors/notFoundError';
 import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
-import { Exchange } from '../models';
+import { Exchange } from '../entity';
 import IRepository from './repository.interface';
 
 export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
-  exchanges: Exchange[] = [];
+  public add = async (exchangeData: NewExchanges): Promise<Exchange> => {
+    const exchangeCreated = DataSourceFunction(Exchange).create({
+      currency: exchangeData.currency,
+      date: exchangeData.date,
+      rate: exchangeData.rate,
+    });
 
-  public add = (data: NewExchanges): Exchange => {
-    this.exchanges.push(data.eurExchange, data.usdExchange, data.uyuExchange);
+    const exchange = await DataSourceFunction(Exchange).save(exchangeCreated);
 
-    return data.uyuExchange;
+    return exchange as Exchange;
   };
 
-  public getAll = (): Exchange[] => {
-    return this.exchanges;
+  public getAll = async (): Promise<Exchange[]> => {
+    const exchanges = await DataSourceFunction(Exchange).find();
+    return exchanges as Exchange[];
+  };
+
+  public getOne = async (currencyId: number): Promise<Exchange> => {
+    const getExchange = await DataSourceFunction(Exchange).findOne({
+      where: { currencyId },
+      order: { date: 'DESC' },
+    });
+
+    if (!getExchange) throw new NotFoundError(`Exchange not found`);
+
+    return getExchange as Exchange;
   };
 }
 

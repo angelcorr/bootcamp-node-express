@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { services } from '../../services';
 import { UserService } from '../../services/user.services';
-import { User } from '../../models';
+import { User } from '../../entity';
 import constants from '../../constants';
 import UnauthorizedError from '../../customErrors/unauthorizedError';
 import NotFoundError from '../../customErrors/notFoundError';
@@ -36,14 +36,13 @@ export class UserController {
     if (req.params.id !== user.id) {
       throw new UnauthorizedError('Invalid user');
     }
-
-    const userAccounts = this.userService.getUserAccounts(user.id);
+    const userAccounts = await this.userService.getUserAccounts(user.id);
 
     res.send({ accounts: userAccounts });
   };
 
   public getUser = async (req: Request, res: Response) => {
-    const user = this.userService.getById(req.params.id);
+    const user = await this.userService.getById(req.params.id);
 
     if (!user) {
       throw new NotFoundError('Not found');

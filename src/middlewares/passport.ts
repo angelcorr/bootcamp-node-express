@@ -9,11 +9,8 @@ import constants from '../constants';
 const localStrategy = new LocalStrategy(
   { usernameField: 'email', passwordField: 'password' },
   async (email: string, password: string, done) => {
-    const user = services.userService.getOne(email);
-
-    if (!user) {
-      done(new UnauthorizedError('The email or password are incorrect'));
-    } else {
+    try {
+      const user = await services.userService.getOne(email);
       const comparedHash = await bcrypt.compare(password, user.hashPassword);
 
       if (email === user.email && comparedHash) {
@@ -21,6 +18,8 @@ const localStrategy = new LocalStrategy(
       } else {
         done(new UnauthorizedError('The email or password are incorrect'));
       }
+    } catch (error) {
+      done(new UnauthorizedError('The email or password are incorrect'));
     }
   },
 );
@@ -29,8 +28,9 @@ const jwtStrategyOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: constants.JWT_SECRET,
 };
-const jwtStrategy = new JwtStrategy(jwtStrategyOptions, (jwtPayload, done) => {
-  const user = services.userService.getOne(jwtPayload.email);
+const jwtStrategy = new JwtStrategy(jwtStrategyOptions, async (jwtPayload, done) => {
+  const user = await services.userService.getOne(jwtPayload.email);
+
   if (!user) {
     done(new UnauthorizedError('Invalid token'));
   } else {

@@ -8,8 +8,10 @@ export class Currencies1692300505338 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'integer',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'type',
@@ -27,7 +29,7 @@ export class Currencies1692300505338 implements MigrationInterface {
     await queryRunner.createIndex(
       'currencies',
       new TableIndex({
-        name: 'currency_index',
+        name: 'currencyIndex',
         columnNames: ['id'],
       }),
     );

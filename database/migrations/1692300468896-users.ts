@@ -10,13 +10,15 @@ export class User1692300468896 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'uuid',
           },
           {
-            name: 'first_name',
+            name: 'firstName',
             type: 'varchar',
           },
           {
-            name: 'last_name',
+            name: 'lastName',
             type: 'varchar',
           },
           {
@@ -24,7 +26,7 @@ export class User1692300468896 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'hash_password',
+            name: 'hashPassword',
             type: 'varchar',
           },
         ],

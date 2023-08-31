@@ -1,7 +1,7 @@
-import { Exchange } from '../models';
+import { Currency } from '../entity';
 
 export type NewExchanges = {
-  usdExchange: Exchange;
-  uyuExchange: Exchange;
-  eurExchange: Exchange;
+  currency: Currency;
+  date: Date;
+  rate: number;
 };

@@ -10,13 +10,15 @@ export class Transactions1692300678026 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'uuid',
           },
           {
-            name: 'source_account_id',
+            name: 'sourceAccountId',
             type: 'uuid',
           },
           {
-            name: 'deliver_account_id',
+            name: 'deliverAccountId',
             type: 'uuid',
           },
           {
@@ -33,12 +35,24 @@ export class Transactions1692300678026 implements MigrationInterface {
             type: 'decimal',
           },
           {
-            name: 'currency_id',
-            type: 'varchar',
+            name: 'sourceCurrencyId',
+            type: 'integer',
+            isNullable: true,
           },
           {
-            name: 'exchange_date',
+            name: 'deliverCurrencyId',
+            type: 'integer',
+            isNullable: true,
+          },
+          {
+            name: 'sourceExchangeDate',
             type: 'date',
+            isNullable: true,
+          },
+          {
+            name: 'deliverExchangeDate',
+            type: 'date',
+            isNullable: true,
           },
         ],
       }),
@@ -48,7 +62,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createIndex(
       'transactions',
       new TableIndex({
-        name: 'transaction_index',
+        name: 'transactionIndex',
         columnNames: ['id'],
       }),
     );
@@ -56,7 +70,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['source_account_id'],
+        columnNames: ['sourceAccountId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'accounts',
         onDelete: 'CASCADE',
@@ -66,7 +80,7 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['deliver_account_id'],
+        columnNames: ['deliverAccountId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'accounts',
         onDelete: 'CASCADE',
@@ -76,17 +90,17 @@ export class Transactions1692300678026 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['currency_id'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'currencies',
+        columnNames: ['sourceExchangeDate', 'sourceCurrencyId'],
+        referencedColumnNames: ['date', 'currencyId'],
+        referencedTableName: 'exchanges',
       }),
     );
 
     await queryRunner.createForeignKey(
       'transactions',
       new TableForeignKey({
-        columnNames: ['exchange_date'],
-        referencedColumnNames: ['date'],
+        columnNames: ['deliverExchangeDate', 'deliverCurrencyId'],
+        referencedColumnNames: ['date', 'currencyId'],
         referencedTableName: 'exchanges',
       }),
     );

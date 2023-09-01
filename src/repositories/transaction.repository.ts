@@ -3,7 +3,6 @@ import NotFoundError from '../customErrors/notFoundError';
 import { TransactionData } from '../dataTransferObjects/transactionData.object';
 import { transactionRequest } from '../dataTransferObjects/transactionRequest.object';
 import { transactionData } from '../dataTransferObjects/transactions.object';
-import { transactionsResponse } from '../dataTransferObjects/transactionsResponse.object';
 import { Transaction } from '../entity';
 import IRepository from './repository.interface';
 
@@ -44,18 +43,17 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
   };
 
   public getTransactions = async (transactionRequest: transactionRequest): Promise<transactionData> => {
-    const transactionsList = await DataSourceFunction(Transaction).findAndCount({
-      relations: {
-        sourceAccount: true,
-      },
-      take: transactionRequest.pageSize,
-      skip: transactionRequest.page,
-    });
-
-    const [transactions] = transactionsList as transactionsResponse;
+    const { page, pageSize, userId } = transactionRequest;
+    const transactionsList = await DataSourceFunction(Transaction)
+      .createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.sourceAccount', 'account')
+      .where('account.userId = :userId', { userId })
+      .take(pageSize)
+      .skip(page * pageSize)
+      .getMany();
 
     return {
-      transactions,
+      transactions: transactionsList,
       page: transactionRequest.page,
       pageSize: transactionRequest.pageSize,
     } as transactionData;

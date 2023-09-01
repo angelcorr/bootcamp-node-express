@@ -2,7 +2,7 @@ import express from 'express';
 import { UserController, userController } from './user.controller';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
 import passport from '../../middlewares/passport';
-import validationBodyHandler from '../../middlewares/validationBodyHandler';
+import { validationBodyHandler } from '../../middlewares/validationBodyHandler';
 import { loginSchema } from '../../dataTransferObjects/login.object';
 import { signUpSchema } from '../../dataTransferObjects/signUp.object';
 

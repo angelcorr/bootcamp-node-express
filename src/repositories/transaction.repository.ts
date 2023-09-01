@@ -46,8 +46,9 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
     const { page, pageSize, userId } = transactionRequest;
     const transactionsList = await DataSourceFunction(Transaction)
       .createQueryBuilder('transaction')
-      .innerJoinAndMapMany('transaction.sourceAccount', 'transaction.deliverAccount', 'account')
-      .where('account.userId = :userId', { userId })
+      .innerJoinAndSelect('transaction.sourceAccount', 'sourceAccount')
+      .innerJoinAndSelect('transaction.deliverAccount', 'deliverAccount')
+      .where('sourceAccount.userId = :userId OR deliverAccount.userId = :userId', { userId })
       .take(pageSize)
       .skip(page * pageSize)
       .getMany();

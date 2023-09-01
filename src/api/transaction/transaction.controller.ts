@@ -37,6 +37,27 @@ export class TransactionController {
     const transaction = await this.transactionService.create(transactionData);
     res.status(200).send({ transaction });
   };
+
+  public getTransactions = async (req: Request, res: Response) => {
+    let page = Number(req.query.page);
+    let pageSize = Number(req.query.pageSize);
+    const user = req.user as User;
+
+    if (!user) {
+      throw new UnauthorizedError('You must log in');
+    }
+
+    if (!page) {
+      page = 0;
+    }
+
+    if (!pageSize) {
+      pageSize = 10;
+    }
+
+    const transactions = await this.transactionService.getTransactions({ page, pageSize, user: user.id });
+    res.status(200).send({ data: transactions });
+  };
 }
 
 export const transactionController = new TransactionController(

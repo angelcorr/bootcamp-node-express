@@ -24,6 +24,8 @@ class TransactionRoutes {
       validationBodyHandler(newTransactionSchema),
       asyncHandler(this.transactionController.createTransaction),
     );
+
+    this.transactionRouter.get('/', asyncHandler(this.transactionController.getTransactions));
   }
 }
 

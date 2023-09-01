@@ -1,6 +1,9 @@
 import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
 import { TransactionData } from '../dataTransferObjects/transactionData.object';
+import { transactionRequest } from '../dataTransferObjects/transactionRequest.object';
+import { transactionData } from '../dataTransferObjects/transactions.object';
+import { transactionsResponse } from '../dataTransferObjects/transactionsResponse.object';
 import { Transaction } from '../entity';
 import IRepository from './repository.interface';
 
@@ -38,6 +41,24 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
     }
 
     return transaction as Transaction;
+  };
+
+  public getTransactions = async (transactionRequest: transactionRequest): Promise<transactionData> => {
+    const transactionsList = await DataSourceFunction(Transaction).findAndCount({
+      relations: {
+        sourceAccount: true,
+      },
+      take: transactionRequest.pageSize,
+      skip: transactionRequest.page,
+    });
+
+    const [transactions] = transactionsList as transactionsResponse;
+
+    return {
+      transactions,
+      page: transactionRequest.page,
+      pageSize: transactionRequest.pageSize,
+    } as transactionData;
   };
 }
 

@@ -2,7 +2,7 @@ import express from 'express';
 import { UserController, userController } from './user.controller';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
 import passport from '../../middlewares/passport';
-import { validationBodyHandler } from '../../middlewares/validationBodyHandler';
+import { bodyHandlerValidation } from '../../middlewares/zodValidationHandler';
 import { loginSchema } from '../../dataTransferObjects/login.object';
 import { signUpSchema } from '../../dataTransferObjects/signUp.object';
 
@@ -23,13 +23,13 @@ class UserRoutes {
   private setRoutes() {
     this.userRouter.post(
       '/sign-up',
-      validationBodyHandler(signUpSchema),
+      bodyHandlerValidation(signUpSchema),
       asyncHandler(this.userController.signUp),
     );
 
     this.userRouter.post(
       '/login',
-      validationBodyHandler(loginSchema),
+      bodyHandlerValidation(loginSchema),
       passport.authenticate('local', { session: false }),
       asyncHandler(this.userController.login),
     );

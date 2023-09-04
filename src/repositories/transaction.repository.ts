@@ -1,10 +1,10 @@
 import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
 import { TransactionData } from '../dataTransferObjects/transactionData.object';
-import { transactionRequest } from '../dataTransferObjects/transactionRequest.object';
-import { transactionData } from '../dataTransferObjects/transactions.object';
+import { Transactions } from '../dataTransferObjects/transactions.object';
 import { Transaction } from '../entity';
 import IRepository from './repository.interface';
+import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
 
 export class TransactionRepository implements IRepository<TransactionData, Transaction> {
   transactions: Transaction[] = [];
@@ -42,22 +42,41 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
     return transaction as Transaction;
   };
 
-  public getTransactions = async (transactionRequest: transactionRequest): Promise<transactionData> => {
-    const { page, pageSize, userId } = transactionRequest;
-    const transactionsList = await DataSourceFunction(Transaction)
+  public getTransactions = async (transactionRequest: TransactionRequest): Promise<Transactions> => {
+    const { page, pageSize, userId, dateFrom, dateTo, accountId, sortBy, sortOrder } = transactionRequest;
+
+    const query = DataSourceFunction(Transaction)
       .createQueryBuilder('transaction')
       .innerJoinAndSelect('transaction.sourceAccount', 'sourceAccount')
       .innerJoinAndSelect('transaction.deliverAccount', 'deliverAccount')
-      .where('sourceAccount.userId = :userId OR deliverAccount.userId = :userId', { userId })
+      .where('(sourceAccount.userId = :userId OR deliverAccount.userId = :userId)', { userId });
+
+    if (accountId) {
+      query.andWhere('(sourceAccount.id = :accountId OR deliverAccount.id = :accountId)', { accountId });
+    }
+
+    if (dateFrom) {
+      query.andWhere('transaction.time >= :dateFrom', { dateFrom });
+    }
+
+    if (dateTo) {
+      query.andWhere('transaction.time < :dateTo', { dateTo });
+    }
+
+    if (sortBy) {
+      query.orderBy(`transaction.${sortBy}`, sortOrder);
+    }
+
+    const transactionsList = await query
       .take(pageSize)
-      .skip(page * pageSize)
+      .skip((page - 1) * pageSize)
       .getMany();
 
     return {
       transactions: transactionsList,
       page: transactionRequest.page,
       pageSize: transactionRequest.pageSize,
-    } as transactionData;
+    } as Transactions;
   };
 }
 

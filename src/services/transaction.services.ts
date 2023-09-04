@@ -6,8 +6,8 @@ import { TransactionRepository } from '../repositories/transaction.repository';
 import { AccountService, accountService } from './account.services';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
 import { ExchangeService, exchangeService } from './exchange.services';
-import { transactionRequest } from '../dataTransferObjects/transactionRequest.object';
-import { transactionData } from '../dataTransferObjects/transactions.object';
+import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
+import { Transactions } from '../dataTransferObjects/transactions.object';
 
 export class TransactionService implements IService<NewTransaction, Transaction> {
   private transactionRepository;
@@ -69,7 +69,7 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     return transaction;
   };
 
-  public getTransactions = async (transactionRequest: transactionRequest): Promise<transactionData> => {
+  public getTransactions = async (transactionRequest: TransactionRequest): Promise<Transactions> => {
     const transactions = await this.transactionRepository.getTransactions(transactionRequest);
     return transactions;
   };

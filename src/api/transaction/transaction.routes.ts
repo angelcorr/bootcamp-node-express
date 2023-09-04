@@ -1,6 +1,6 @@
 import express from 'express';
 import { TransactionController, transactionController } from './transaction.controller';
-import { validationBodyHandler, validationHeaderHandler } from '../../middlewares/validationBodyHandler';
+import { bodyHandlerValidation, queryParamsHandlerValidation } from '../../middlewares/zodValidationHandler';
 import { newTransactionSchema } from '../../dataTransferObjects/newTransaction.object';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
 import { transactionRequestSchema } from '../../dataTransferObjects/transactionRequest.object';
@@ -22,13 +22,13 @@ class TransactionRoutes {
   private setRoutes() {
     this.transactionRouter.post(
       '/',
-      validationBodyHandler(newTransactionSchema),
+      bodyHandlerValidation(newTransactionSchema),
       asyncHandler(this.transactionController.createTransaction),
     );
 
     this.transactionRouter.get(
       '/',
-      validationHeaderHandler(transactionRequestSchema),
+      queryParamsHandlerValidation(transactionRequestSchema),
       asyncHandler(this.transactionController.getTransactions),
     );
   }

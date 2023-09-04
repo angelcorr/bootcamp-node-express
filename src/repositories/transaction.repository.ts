@@ -63,7 +63,7 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       query.andWhere('transaction.time < :dateTo', { dateTo });
     }
 
-    if (sortBy || sortOrder) {
+    if (sortBy) {
       query.orderBy(`transaction.${sortBy}`, sortOrder);
     }
 

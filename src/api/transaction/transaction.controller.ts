@@ -39,8 +39,14 @@ export class TransactionController {
   };
 
   public getTransactions = async (req: Request, res: Response) => {
-    let page = req.query.page || 0;
-    let pageSize = req.query.pageSize || 10;
+    let page = req.query.page ?? 1;
+    let pageSize = req.query.pageSize ?? 10;
+    const dateFrom = req.query.dateFrom ? new Date(req.query.dateFrom as string) : undefined;
+    const dateTo = req.query.dateTo ? new Date(req.query.dateTo as string) : undefined;
+    const sortBy = (req.query.sortBy ?? 'id') as string;
+    const sortOrder = (req.query.sortOrder ?? 'DESC') as 'DESC' | 'ASC';
+    const accountId = req.query.accountId as string | undefined;
+
     const user = req.user as User;
 
     if (!user) {
@@ -50,7 +56,16 @@ export class TransactionController {
     page = Number(page);
     pageSize = Number(pageSize);
 
-    const transactions = await this.transactionService.getTransactions({ page, pageSize, userId: user.id });
+    const transactions = await this.transactionService.getTransactions({
+      page,
+      pageSize,
+      userId: user.id,
+      dateFrom,
+      dateTo,
+      accountId,
+      sortBy,
+      sortOrder,
+    });
     res.status(200).send({ data: transactions });
   };
 }

@@ -23,8 +23,3 @@ export class Account extends BaseEntity {
   @ManyToOne(() => Currency, (currency) => currency.accounts)
   currency: Currency;
 }
-
-export enum accountTransactionType {
-  add = 'add',
-  subtract = 'subtract',
-}

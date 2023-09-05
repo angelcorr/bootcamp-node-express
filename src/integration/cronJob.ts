@@ -24,12 +24,12 @@ cron.schedule('00 8 * * *', async () => {
   const eurExchange = {
     currency: eurCurrency,
     date: date,
-    rate: data.rates.UYU,
+    rate: Number(data.rates.UYU),
   };
   const usdExchange = {
     currency: usdCurrency,
     date: date,
-    rate: usdRate,
+    rate: Number(usdRate),
   };
   const uyuExchange = {
     currency: uyuCurrency,

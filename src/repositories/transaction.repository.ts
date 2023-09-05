@@ -2,34 +2,43 @@ import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
 import { TransactionData } from '../dataTransferObjects/transactionData.object';
 import { Transactions } from '../dataTransferObjects/transactions.object';
-import { Transaction } from '../entity';
+import { Account, Transaction } from '../entity';
 import IRepository from './repository.interface';
 import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
+import { AppDataSource } from '../../database/dataSource';
 
 export class TransactionRepository implements IRepository<TransactionData, Transaction> {
-  transactions: Transaction[] = [];
-
   public add = async (newTransaction: TransactionData): Promise<Transaction> => {
-    const {
-      sourceAccountData,
-      deliveryAccountData,
-      description,
-      amount,
-      sourceExchangeData,
-      deliverExchangeData,
-    } = newTransaction;
-    const transactionCreated = DataSourceFunction(Transaction).create({
-      sourceAccount: sourceAccountData,
-      deliverAccount: deliveryAccountData,
-      time: new Date(),
-      description,
-      amount,
-      sourceExchangeData,
-      deliverExchangeData,
-    });
+    return AppDataSource.transaction(async (transactionalEntityManager) => {
+      const { sourceAccount, deliverAccount, description, amount, sourceExchange, deliverExchange } =
+        newTransaction;
 
-    const transaction = await DataSourceFunction(Transaction).save(transactionCreated);
-    return transaction as Transaction;
+      const transactionRepository = transactionalEntityManager.getRepository(Transaction);
+      const accountRepository = transactionalEntityManager.getRepository(Account);
+
+      let newAmount = amount;
+      if (sourceAccount.currency.id !== deliverAccount.currency.id) {
+        const dailyExchange = +sourceExchange.rate / +deliverExchange.rate;
+        newAmount = Number((+amount * dailyExchange).toFixed(3));
+      }
+
+      deliverAccount.capital = deliverAccount.capital + newAmount;
+      await accountRepository.save(deliverAccount);
+
+      sourceAccount.capital = sourceAccount.capital - amount;
+      await accountRepository.save(sourceAccount);
+
+      const transaction = transactionRepository.create({
+        sourceAccount,
+        deliverAccount,
+        time: new Date(),
+        description,
+        amount,
+        sourceExchange,
+        deliverExchange,
+      });
+      return transactionRepository.save(transaction);
+    });
   };
 
   public getById = async (id: string): Promise<Transaction> => {

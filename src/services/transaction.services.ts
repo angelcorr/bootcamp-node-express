@@ -1,5 +1,5 @@
 import IService from '../interfaces/service.interface';
-import { Transaction, accountTransactionType } from '../entity';
+import { Transaction } from '../entity';
 import { repositories } from '../repositories';
 import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
 import { TransactionRepository } from '../repositories/transaction.repository';
@@ -25,41 +25,23 @@ export class TransactionService implements IService<NewTransaction, Transaction>
   }
 
   public create = async (newTransaction: NewTransaction): Promise<Transaction> => {
-    let newAmount: number;
     const { sourceAccountId, amount, deliverAccountId, description } = newTransaction;
-    const sourceAccountData = await this.accountService.getOne(sourceAccountId);
-    const deliveryAccountData = await this.accountService.getOne(deliverAccountId);
-    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency.id);
-    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency.id);
-    newAmount = amount;
+    const sourceAccount = await this.accountService.getOne(sourceAccountId);
+    const deliverAccount = await this.accountService.getOne(deliverAccountId);
+    const sourceExchange = await this.exchangeService.getExchange(sourceAccount.currency.id);
+    const deliverExchange = await this.exchangeService.getExchange(deliverAccount.currency.id);
 
-    if (sourceAccountData.currency.id !== deliveryAccountData.currency.id) {
-      const dailyExchange = +sourceExchangeData.rate / +deliverExchangeData.rate;
-      newAmount = Number((+amount * dailyExchange).toFixed(3));
-    }
-
-    if (sourceAccountData.capital < amount) {
+    if (sourceAccount.capital < amount) {
       throw new UnprocessableContentError('Insufficient funds');
     }
 
-    const deliveryAccount = await this.accountService.updateAccount(
-      newAmount,
-      deliverAccountId,
-      accountTransactionType.add,
-    );
-    const sourceAccount = await this.accountService.updateAccount(
-      amount,
-      sourceAccountId,
-      accountTransactionType.subtract,
-    );
-
     return this.transactionRepository.add({
-      sourceAccountData: sourceAccount,
-      deliveryAccountData: deliveryAccount,
+      sourceAccount,
+      deliverAccount,
       description,
       amount,
-      sourceExchangeData,
-      deliverExchangeData,
+      sourceExchange,
+      deliverExchange,
     });
   };
 

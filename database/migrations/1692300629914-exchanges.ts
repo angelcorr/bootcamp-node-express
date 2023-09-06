@@ -18,7 +18,7 @@ export class Exchanges1692300629914 implements MigrationInterface {
           },
           {
             name: 'rate',
-            type: 'varchar',
+            type: 'decimal',
           },
         ],
       }),

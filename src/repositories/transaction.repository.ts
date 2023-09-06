@@ -7,29 +7,32 @@ import IRepository from './repository.interface';
 import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
 
 export class TransactionRepository implements IRepository<TransactionData, Transaction> {
-  transactions: Transaction[] = [];
-
   public add = async (newTransaction: TransactionData): Promise<Transaction> => {
     const {
-      sourceAccountData,
-      deliveryAccountData,
+      sourceAccount,
+      deliverAccount,
       description,
       amount,
-      sourceExchangeData,
-      deliverExchangeData,
+      sourceExchange,
+      deliverExchange,
+      transactionalEntityManager,
     } = newTransaction;
-    const transactionCreated = DataSourceFunction(Transaction).create({
-      sourceAccount: sourceAccountData,
-      deliverAccount: deliveryAccountData,
+
+    const repository = transactionalEntityManager
+      ? transactionalEntityManager.getRepository(Transaction)
+      : DataSourceFunction(Transaction);
+    const transactionCreated = repository.create({
+      sourceAccount,
+      deliverAccount,
       time: new Date(),
       description,
       amount,
-      sourceExchangeData,
-      deliverExchangeData,
+      sourceExchange,
+      deliverExchange,
     });
 
-    const transaction = await DataSourceFunction(Transaction).save(transactionCreated);
-    return transaction as Transaction;
+    const transaction = await repository.save(transactionCreated);
+    return transaction;
   };
 
   public getById = async (id: string): Promise<Transaction> => {
@@ -76,7 +79,7 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       transactions: transactionsList,
       page: transactionRequest.page,
       pageSize: transactionRequest.pageSize,
-    } as Transactions;
+    } as unknown as Transactions;
   };
 }
 

@@ -24,14 +24,14 @@ export class UserRepository implements IRepository<NewUser, User> {
 
     const user = await DataSourceFunction(User).save(userCreated);
 
-    return user as User;
+    return user;
   };
 
   public getUser = async (email: string): Promise<User> => {
     const user = await DataSourceFunction(User).findOne({ where: { email } });
     if (!user) throw new NotFoundError('Not found');
 
-    return user as User;
+    return user;
   };
 
   public getUserById = async (id: string): Promise<UserWithoutHash> => {
@@ -40,7 +40,7 @@ export class UserRepository implements IRepository<NewUser, User> {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hashPassword, ...userData } = user;
-    return userData as UserWithoutHash;
+    return userData;
   };
 
   public getList = async (id: string): Promise<Account[]> => {
@@ -52,7 +52,7 @@ export class UserRepository implements IRepository<NewUser, User> {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { accounts, ...userData } = userAccounts[0];
-    return accounts as Account[];
+    return accounts;
   };
 }
 

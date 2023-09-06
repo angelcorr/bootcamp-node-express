@@ -1,7 +1,8 @@
-import { Account } from '../entity';
+import { Account, accountTransactionType } from '../entity';
 import { AccountRepository, accountRepository } from '../repositories/account.repository';
 import { NewAccount } from '../dataTransferObjects/newAccount.object';
 import IService from '../interfaces/service.interface';
+import { EntityManager } from 'typeorm';
 
 export class AccountService implements IService<NewAccount, Account> {
   private accountRepository;
@@ -19,7 +20,12 @@ export class AccountService implements IService<NewAccount, Account> {
     return account;
   };
 
-  public updateAccount = async (amount: number, id: string, type: string): Promise<Account> => {
+  public updateAccount = async (
+    amount: number,
+    id: string,
+    type: accountTransactionType,
+    transactionalEntityManager: EntityManager,
+  ): Promise<Account> => {
     const { capital } = await this.getOne(id);
 
     let newCapital;
@@ -31,7 +37,7 @@ export class AccountService implements IService<NewAccount, Account> {
       throw new Error(`Unsupported type: ${type}`);
     }
 
-    return await this.accountRepository.updateCapital(newCapital, id);
+    return await this.accountRepository.updateCapital(newCapital, id, transactionalEntityManager);
   };
 }
 

@@ -14,12 +14,12 @@ export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
 
     const exchange = await DataSourceFunction(Exchange).save(exchangeCreated);
 
-    return exchange as Exchange;
+    return exchange;
   };
 
   public getAll = async (): Promise<Exchange[]> => {
     const exchanges = await DataSourceFunction(Exchange).find();
-    return exchanges as Exchange[];
+    return exchanges;
   };
 
   public getOne = async (currencyId: number): Promise<Exchange> => {
@@ -30,7 +30,7 @@ export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
 
     if (!getExchange) throw new NotFoundError(`Exchange not found`);
 
-    return getExchange as Exchange;
+    return getExchange;
   };
 }
 

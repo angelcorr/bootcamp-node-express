@@ -8,6 +8,7 @@ import UnprocessableContentError from '../customErrors/unprocessableContentError
 import { ExchangeService, exchangeService } from './exchange.services';
 import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
 import { Transactions } from '../dataTransferObjects/transactions.object';
+import { buildTransaction } from '../repositories/buildTransaction.repository';
 
 export class TransactionService implements IService<NewTransaction, Transaction> {
   private transactionRepository;
@@ -42,24 +43,29 @@ export class TransactionService implements IService<NewTransaction, Transaction>
       throw new UnprocessableContentError('Insufficient funds');
     }
 
-    const deliveryAccount = await this.accountService.updateAccount(
-      newAmount,
-      deliverAccountId,
-      accountTransactionType.add,
-    );
-    const sourceAccount = await this.accountService.updateAccount(
-      amount,
-      sourceAccountId,
-      accountTransactionType.subtract,
-    );
+    return buildTransaction(async (transactionalEntityManager) => {
+      const deliverAccount = await this.accountService.updateAccount(
+        newAmount,
+        deliverAccountId,
+        accountTransactionType.add,
+        transactionalEntityManager,
+      );
+      const sourceAccount = await this.accountService.updateAccount(
+        amount,
+        sourceAccountId,
+        accountTransactionType.subtract,
+        transactionalEntityManager,
+      );
 
-    return this.transactionRepository.add({
-      sourceAccountData: sourceAccount,
-      deliveryAccountData: deliveryAccount,
-      description,
-      amount,
-      sourceExchangeData,
-      deliverExchangeData,
+      return this.transactionRepository.add({
+        sourceAccount,
+        deliverAccount,
+        description,
+        amount,
+        sourceExchange: sourceExchangeData,
+        deliverExchange: deliverExchangeData,
+        transactionalEntityManager,
+      });
     });
   };
 

@@ -32,7 +32,7 @@ export class TransactionController {
       sourceAccountId,
       deliverAccountId,
       description,
-      amount,
+      amount: Number(amount),
     };
     const transaction = await this.transactionService.create(transactionData);
     res.status(200).send({ transaction });

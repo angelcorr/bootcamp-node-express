@@ -1,3 +1,4 @@
+import { EntityManager } from 'typeorm';
 import { Account, Exchange } from '../entity';
 
 export type TransactionData = {
@@ -7,4 +8,5 @@ export type TransactionData = {
   amount: number;
   sourceExchange: Exchange;
   deliverExchange: Exchange;
+  transactionalEntityManager: EntityManager;
 };

@@ -2,43 +2,37 @@ import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
 import { TransactionData } from '../dataTransferObjects/transactionData.object';
 import { Transactions } from '../dataTransferObjects/transactions.object';
-import { Account, Transaction } from '../entity';
+import { Transaction } from '../entity';
 import IRepository from './repository.interface';
 import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
-import { AppDataSource } from '../../database/dataSource';
 
 export class TransactionRepository implements IRepository<TransactionData, Transaction> {
   public add = async (newTransaction: TransactionData): Promise<Transaction> => {
-    return AppDataSource.transaction(async (transactionalEntityManager) => {
-      const { sourceAccount, deliverAccount, description, amount, sourceExchange, deliverExchange } =
-        newTransaction;
+    const {
+      sourceAccount,
+      deliverAccount,
+      description,
+      amount,
+      sourceExchange,
+      deliverExchange,
+      transactionalEntityManager,
+    } = newTransaction;
 
-      const transactionRepository = transactionalEntityManager.getRepository(Transaction);
-      const accountRepository = transactionalEntityManager.getRepository(Account);
-
-      let newAmount = amount;
-      if (sourceAccount.currency.id !== deliverAccount.currency.id) {
-        const dailyExchange = +sourceExchange.rate / +deliverExchange.rate;
-        newAmount = Number((+amount * dailyExchange).toFixed(3));
-      }
-
-      deliverAccount.capital = deliverAccount.capital + newAmount;
-      await accountRepository.save(deliverAccount);
-
-      sourceAccount.capital = sourceAccount.capital - amount;
-      await accountRepository.save(sourceAccount);
-
-      const transaction = transactionRepository.create({
-        sourceAccount,
-        deliverAccount,
-        time: new Date(),
-        description,
-        amount,
-        sourceExchange,
-        deliverExchange,
-      });
-      return transactionRepository.save(transaction);
+    const repository = transactionalEntityManager
+      ? transactionalEntityManager.getRepository(Transaction)
+      : DataSourceFunction(Transaction);
+    const transactionCreated = repository.create({
+      sourceAccount,
+      deliverAccount,
+      time: new Date(),
+      description,
+      amount,
+      sourceExchange,
+      deliverExchange,
     });
+
+    const transaction = await repository.save(transactionCreated);
+    return transaction;
   };
 
   public getById = async (id: string): Promise<Transaction> => {
@@ -85,7 +79,7 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       transactions: transactionsList,
       page: transactionRequest.page,
       pageSize: transactionRequest.pageSize,
-    } as Transactions;
+    } as unknown as Transactions;
   };
 }
 

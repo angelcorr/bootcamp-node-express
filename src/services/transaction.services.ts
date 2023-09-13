@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import IService from '../interfaces/service.interface';
-import { Transaction, accountTransactionType } from '../entity';
+import { Account, Transaction, accountTransactionType } from '../entity';
 import { repositories } from '../repositories';
 import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
 import { TransactionRepository } from '../repositories/transaction.repository';
@@ -76,8 +78,27 @@ export class TransactionService implements IService<NewTransaction, Transaction>
   };
 
   public getTransactions = async (transactionRequest: TransactionRequest): Promise<Transactions> => {
-    const transactions = await this.transactionRepository.getTransactions(transactionRequest);
-    return transactions;
+    const transactionsList = await this.transactionRepository.getTransactions(transactionRequest);
+
+    if (transactionRequest.graphql) return transactionsList;
+
+    const cleanAccount = ({ userId, ...data }: Account) => data;
+
+    const cleanTransaction = ({
+      sourceCurrencyId,
+      deliverCurrencyId,
+      sourceExchangeDate,
+      deliverExchangeDate,
+      ...data
+    }: Transaction) => ({
+      ...data,
+      deliverAccount: cleanAccount(data.deliverAccount),
+      sourceAccount: cleanAccount(data.sourceAccount),
+    });
+    const transactionsRest = transactionsList.transactions.map(cleanTransaction);
+
+    const newTransactionObject = { ...transactionsList, transactions: transactionsRest };
+    return newTransactionObject as Transactions;
   };
 }
 

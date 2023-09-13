@@ -3,12 +3,13 @@ import { z } from 'zod';
 export type TransactionRequest = {
   page: number;
   pageSize: number;
-  userId: string;
+  userId: string | undefined;
   dateFrom: Date | undefined;
   dateTo: Date | undefined;
   accountId: string | undefined;
   sortBy: string;
   sortOrder: 'ASC' | 'DESC';
+  graphql?: boolean;
 };
 
 export const transactionRequestSchema = z

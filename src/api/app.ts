@@ -8,7 +8,7 @@ import { exchangeRouter } from './exchange/exchange.routes';
 import { transactionRouter } from './transaction/transaction.routes';
 import passport from 'passport';
 import '../integration/cronJob';
-import { run } from '../graphQL';
+import { run } from '../graphql';
 
 export class App {
   private app: express.Application = express();

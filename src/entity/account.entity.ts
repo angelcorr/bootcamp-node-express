@@ -1,4 +1,12 @@
-import { Entity, Column, ManyToOne, OneToMany, BaseEntity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Transaction } from './transaction.entity';
 import { Currency } from './currency.entity';
@@ -15,6 +23,7 @@ export class Account extends BaseEntity {
   public userId: string;
 
   @ManyToOne(() => User, (user) => user.accounts)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sourceAccount, { cascade: true })

@@ -6,7 +6,7 @@ export const transaction = async (parent: undefined, args: CreateTransactionArgs
   const amount = args.amount;
   const description = args.description;
 
-  const transaction = await contextValue.dataSources.transactions.create({
+  const transaction = await contextValue.transactionService.create({
     sourceAccountId,
     deliverAccountId,
     amount,

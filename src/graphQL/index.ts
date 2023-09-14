@@ -55,13 +55,11 @@ export const run = async () => {
   console.log(`🚀 Apollo Server ready`);
   return expressMiddleware(server, {
     context: async () => ({
-      dataSources: {
-        transactions: transactionService,
-        users: userService,
-        accounts: accountService,
-        currencies: currencyService,
-        exchanges: exchangeService,
-      },
+      transactionService,
+      userService,
+      accountService,
+      currencyService,
+      exchangeService,
     }),
   });
 };

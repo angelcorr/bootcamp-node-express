@@ -23,11 +23,9 @@ export type CreateTransactionArgs = {
 };
 
 export type Context = {
-  dataSources: {
-    transactions: TransactionService;
-    users: UserService;
-    accounts: AccountService;
-    currencies: CurrencyService;
-    exchanges: ExchangeService;
-  };
+  transactionService: TransactionService;
+  userService: UserService;
+  accountService: AccountService;
+  currencyService: CurrencyService;
+  exchangeService: ExchangeService;
 };

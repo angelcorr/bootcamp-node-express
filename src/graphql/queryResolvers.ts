@@ -10,7 +10,7 @@ export const transactions = async (parent: undefined, args: GetTransactionsArgs,
   const accountId = args.accountId as string | undefined;
   const userId = args.userId as string | undefined;
 
-  const { transactions } = await contextValue.dataSources.transactions.getTransactions({
+  const { transactions } = await contextValue.transactionService.getTransactions({
     page,
     pageSize,
     userId,
@@ -28,7 +28,7 @@ export const transactions = async (parent: undefined, args: GetTransactionsArgs,
 export const user = async (parent: undefined, args: GetTransactionsArgs, contextValue: Context) => {
   const userId = args.userId as string;
 
-  const user = await contextValue.dataSources.users.getById(userId);
+  const user = await contextValue.userService.getById(userId);
 
   return user;
 };

@@ -1,9 +1,9 @@
 import express from 'express';
 import { TransactionController, transactionController } from './transaction.controller';
 import { bodyHandlerValidation, queryParamsHandlerValidation } from '../../middlewares/zodValidationHandler';
-import { newTransactionSchema } from '../../dataTransferObjects/newTransaction.object';
+import { newTransactionSchema } from '../../dataTransferObjects/newTransaction.dto';
 import asyncHandler from '../../middlewares/asyncErrorHandler';
-import { transactionRequestSchema } from '../../dataTransferObjects/transactionRequest.object';
+import { transactionRequestSchema } from '../../dataTransferObjects/transactionRequest.dto';
 
 class TransactionRoutes {
   private transactionController;

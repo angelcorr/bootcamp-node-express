@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type TransactionRequest = {
+export type TransactionRequestDto = {
   page: number;
   pageSize: number;
   userId: string | undefined;

@@ -1,11 +1,11 @@
 import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
-import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
+import { NewExchangesDto } from '../dataTransferObjects/newExchanges.dto';
 import { Exchange } from '../entity';
 import IRepository from './repository.interface';
 
-export class ExchangeRepository implements IRepository<NewExchanges, Exchange> {
-  public add = async (exchangeData: NewExchanges): Promise<Exchange> => {
+export class ExchangeRepository implements IRepository<NewExchangesDto, Exchange> {
+  public add = async (exchangeData: NewExchangesDto): Promise<Exchange> => {
     const exchangeCreated = DataSourceFunction(Exchange).create({
       currency: exchangeData.currency,
       date: exchangeData.date,

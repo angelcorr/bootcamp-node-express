@@ -1,6 +1,6 @@
 import { Transaction } from '../entity';
 
-export type Transactions = {
+export type TransactionsDto = {
   transactions: Transaction[];
   page: number;
   pageSize: number;

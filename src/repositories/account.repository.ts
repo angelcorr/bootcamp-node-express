@@ -1,12 +1,12 @@
 import { Account } from '../entity';
 import IRepository from './repository.interface';
-import { NewAccount } from '../dataTransferObjects/newAccount.object';
+import { NewAccountDto } from '../dataTransferObjects/newAccount.dto';
 import NotFoundError from '../customErrors/notFoundError';
 import { DataSourceFunction } from '../../database/repository';
 import { EntityManager } from 'typeorm';
 
-export class AccountRepository implements IRepository<NewAccount, Account> {
-  async add(newAccount: NewAccount): Promise<Account> {
+export class AccountRepository implements IRepository<NewAccountDto, Account> {
+  async add(newAccount: NewAccountDto): Promise<Account> {
     const { capital, user, currency } = newAccount;
     const accountCreated = DataSourceFunction(Account).create({
       capital,

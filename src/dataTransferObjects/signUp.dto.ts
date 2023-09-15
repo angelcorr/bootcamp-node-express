@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type SignUp = {
+export type SignUpDto = {
   lastName: string;
   firstName: string;
   email: string;

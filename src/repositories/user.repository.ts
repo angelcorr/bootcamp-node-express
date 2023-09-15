@@ -1,13 +1,13 @@
 import IRepository from './repository.interface';
 import { Account, User } from '../entity';
-import { NewUser } from '../dataTransferObjects/newUser.object';
-import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
+import { NewUserDto } from '../dataTransferObjects/newUser.dto';
+import { UserWithoutHashDto } from '../dataTransferObjects/userWithoutHas.dto';
 import { DataSourceFunction } from '../../database/repository';
-import BadRequestError from '../customErrors/BadRequestError';
+import BadRequestError from '../customErrors/badRequestError';
 import NotFoundError from '../customErrors/notFoundError';
 
-export class UserRepository implements IRepository<NewUser, User> {
-  public add = async (newUser: NewUser): Promise<User> => {
+export class UserRepository implements IRepository<NewUserDto, User> {
+  public add = async (newUser: NewUserDto): Promise<User> => {
     const { firstName, lastName, email, hashPassword } = newUser;
     const getUsers = await DataSourceFunction(User).find();
     const findEmailMatches = getUsers.find((user) => user.email === email.toLowerCase());
@@ -34,7 +34,7 @@ export class UserRepository implements IRepository<NewUser, User> {
     return user;
   };
 
-  public getUserById = async (id: string): Promise<UserWithoutHash> => {
+  public getUserById = async (id: string): Promise<UserWithoutHashDto> => {
     const user = await DataSourceFunction(User).findOneBy({ id });
     if (!user) throw new NotFoundError('Not found');
 

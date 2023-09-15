@@ -1,13 +1,13 @@
 import { DataSourceFunction } from '../../database/repository';
 import NotFoundError from '../customErrors/notFoundError';
-import { TransactionData } from '../dataTransferObjects/transactionData.object';
-import { Transactions } from '../dataTransferObjects/transactions.object';
+import { TransactionDataDto } from '../dataTransferObjects/transactionData.dto';
+import { TransactionsDto } from '../dataTransferObjects/transactions.dto';
 import { Transaction } from '../entity';
 import IRepository from './repository.interface';
-import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
+import { TransactionRequestDto } from '../dataTransferObjects/transactionRequest.dto';
 
-export class TransactionRepository implements IRepository<TransactionData, Transaction> {
-  public add = async (newTransaction: TransactionData): Promise<Transaction> => {
+export class TransactionRepository implements IRepository<TransactionDataDto, Transaction> {
+  public add = async (newTransaction: TransactionDataDto): Promise<Transaction> => {
     const {
       sourceAccount,
       deliverAccount,
@@ -45,7 +45,7 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
     return transaction as Transaction;
   };
 
-  public getTransactions = async (transactionRequest: TransactionRequest): Promise<Transactions> => {
+  public getTransactions = async (transactionRequest: TransactionRequestDto): Promise<TransactionsDto> => {
     const { page, pageSize, userId, dateFrom, dateTo, accountId, sortBy, sortOrder } = transactionRequest;
 
     const query = DataSourceFunction(Transaction)
@@ -79,7 +79,7 @@ export class TransactionRepository implements IRepository<TransactionData, Trans
       transactions: transactionsList,
       page: transactionRequest.page,
       pageSize: transactionRequest.pageSize,
-    } as unknown as Transactions;
+    } as unknown as TransactionsDto;
   };
 }
 

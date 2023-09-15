@@ -3,7 +3,7 @@ import NotFoundError from '../customErrors/notFoundError';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
 import { ZodError } from 'zod';
 import UnauthorizedError from '../customErrors/unauthorizedError';
-import BadRequestError from '../customErrors/BadRequestError';
+import BadRequestError from '../customErrors/badRequestError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {

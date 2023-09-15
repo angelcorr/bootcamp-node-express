@@ -1,4 +1,4 @@
-import { Transaction } from 'typeorm';
+import { Transaction } from '../entity';
 
 export type Transactions = {
   transactions: Transaction[];

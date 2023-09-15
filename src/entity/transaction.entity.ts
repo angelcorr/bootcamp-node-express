@@ -5,16 +5,28 @@ import { Exchange } from './exchange.entity';
 @Entity('transactions')
 export class Transaction {
   @PrimaryGeneratedColumn('uuid')
-  public id: string;
+  id: string;
 
   @Column()
-  private time: Date;
+  time: Date;
 
   @Column()
-  private description: string;
+  description: string;
+
+  @Column()
+  sourceCurrencyId: number;
+
+  @Column()
+  deliverCurrencyId: number;
+
+  @Column()
+  sourceExchangeDate: Date;
+
+  @Column()
+  deliverExchangeDate: Date;
 
   @Column('decimal')
-  private amount: number;
+  amount: number;
 
   @ManyToOne(() => Account, (account) => account.sourceTransaction)
   sourceAccount: Account;

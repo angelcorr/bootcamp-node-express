@@ -71,11 +71,7 @@ export class TransactionService implements IService<NewTransactionDto, Transacti
     });
   };
 
-  public getOne = async (id: string): Promise<Transaction> => {
-    const transaction = await this.transactionRepository.getById(id);
-
-    return transaction;
-  };
+  public getOne = async (id: string): Promise<Transaction> => this.transactionRepository.getById(id);
 
   public getTransactions = async (transactionRequest: TransactionRequestDto): Promise<TransactionsDto> => {
     const transactionsList = await this.transactionRepository.getTransactions(transactionRequest);

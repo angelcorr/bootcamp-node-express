@@ -7,7 +7,6 @@ import { accountService, AccountService } from './account.service';
 import { UserRepository } from '../repositories/user.repository';
 import IService from '../interfaces/service.interface';
 import { SignUpDto } from '../dataTransferObjects/signUp.dto';
-import NotFoundError from '../customErrors/notFoundError';
 import { UserWithoutHashDto } from '../dataTransferObjects/userWithoutHas.dto';
 
 export class UserService implements IService<SignUpDto, User> {
@@ -61,23 +60,11 @@ export class UserService implements IService<SignUpDto, User> {
     return user;
   };
 
-  public getOne = async (email: string): Promise<User> => {
-    const user = await this.userRepository.getUser(email);
-    if (!user) {
-      throw new NotFoundError(`Not found: ${email}`);
-    }
+  public getOne = async (email: string): Promise<User> => this.userRepository.getUser(email);
 
-    return user;
-  };
+  public getById = async (id: string): Promise<UserWithoutHashDto> => this.userRepository.getUserById(id);
 
-  public getById = async (id: string): Promise<UserWithoutHashDto> => {
-    return await this.userRepository.getUserById(id);
-  };
-
-  public getUserAccounts = async (id: string): Promise<Account[]> => {
-    const accounts = await this.userRepository.getList(id);
-    return accounts;
-  };
+  public getUserAccounts = async (id: string): Promise<Account[]> => this.userRepository.getList(id);
 }
 
 export const userService: UserService = new UserService(

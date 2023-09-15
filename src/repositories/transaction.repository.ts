@@ -18,10 +18,11 @@ export class TransactionRepository implements IRepository<TransactionDataDto, Tr
       transactionalEntityManager,
     } = newTransaction;
 
-    const repository = transactionalEntityManager
-      ? transactionalEntityManager.getRepository(Transaction)
-      : DataSourceFunction(Transaction);
-    const transactionCreated = repository.create({
+    if (!transactionalEntityManager) {
+      throw new Error('No transaction provided');
+    }
+
+    const transactionCreated = transactionalEntityManager.getRepository(Transaction).create({
       sourceAccount,
       deliverAccount,
       time: new Date(),
@@ -31,7 +32,7 @@ export class TransactionRepository implements IRepository<TransactionDataDto, Tr
       deliverExchange,
     });
 
-    const transaction = await repository.save(transactionCreated);
+    const transaction = await transactionalEntityManager.getRepository(Transaction).save(transactionCreated);
     return transaction;
   };
 

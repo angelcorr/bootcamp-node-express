@@ -6,19 +6,20 @@ import { DataSourceFunction } from '../../database/repository';
 import { EntityManager } from 'typeorm';
 
 export class AccountRepository implements IRepository<NewAccountDto, Account> {
+  private repository = DataSourceFunction(Account);
+
   async add(newAccount: NewAccountDto): Promise<Account> {
     const { capital, user, currency } = newAccount;
-    const accountCreated = DataSourceFunction(Account).create({
+    const accountCreated = this.repository.create({
       capital,
       user,
       currency,
     });
-    const account = await DataSourceFunction(Account).save(accountCreated);
-    return account;
+    return this.repository.save(accountCreated);
   }
 
   async getOne(id: string): Promise<Account> {
-    const oneAccount = await DataSourceFunction(Account).findOne({
+    const oneAccount = await this.repository.findOne({
       where: { id },
       relations: {
         currency: true,
@@ -33,14 +34,10 @@ export class AccountRepository implements IRepository<NewAccountDto, Account> {
     id: string,
     transactionalEntityManager: EntityManager,
   ): Promise<Account> {
-    const repository = transactionalEntityManager
-      ? transactionalEntityManager.getRepository(Account)
-      : DataSourceFunction(Account);
-
-    const account = await repository.findOneBy({ id });
+    const account = await transactionalEntityManager.getRepository(Account).findOneBy({ id });
     if (!account) throw new NotFoundError(`Id not found: ${id}`);
     account.capital = newCapital;
-    await repository.save(account);
+    await transactionalEntityManager.getRepository(Account).save(account);
 
     return account;
   }

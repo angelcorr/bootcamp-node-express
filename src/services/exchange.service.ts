@@ -11,17 +11,11 @@ export class ExchangeService implements IService<Exchange, Exchange> {
     this.exchangeRepository = exchangeRepository;
   }
 
-  public getExchanges = async (): Promise<Exchange[]> => {
-    return await this.exchangeRepository.getAll();
-  };
+  public getExchanges = async (): Promise<Exchange[]> => this.exchangeRepository.getAll();
 
-  public create = async (data: NewExchangesDto): Promise<Exchange> => {
-    return await this.exchangeRepository.add(data);
-  };
+  public create = async (data: NewExchangesDto): Promise<Exchange> => this.exchangeRepository.add(data);
 
-  public getOne = async (currencyId: number): Promise<Exchange> => {
-    return await this.exchangeRepository.getOne(currencyId);
-  };
+  public getOne = async (currencyId: number): Promise<Exchange> => this.exchangeRepository.getOne(currencyId);
 }
 
 export const exchangeService = new ExchangeService(repositories.exchangeRepository);

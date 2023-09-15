@@ -10,15 +10,10 @@ export class AccountService implements IService<NewAccountDto, Account> {
     this.accountRepository = accountRepository;
   }
 
-  public getOne = async (id: string): Promise<Account> => {
-    const account = await this.accountRepository.getOne(id);
-    return account;
-  };
+  public getOne = async (id: string): Promise<Account> => this.accountRepository.getOne(id);
 
-  public create = async (newAccount: NewAccountDto): Promise<Account> => {
-    const account = await this.accountRepository.add(newAccount);
-    return account;
-  };
+  public create = async (newAccount: NewAccountDto): Promise<Account> =>
+    this.accountRepository.add(newAccount);
 
   public updateAccount = async (
     amount: number,

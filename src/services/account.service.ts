@@ -1,10 +1,10 @@
 import { Account, accountTransactionType } from '../entity';
 import { AccountRepository, accountRepository } from '../repositories/account.repository';
-import { NewAccount } from '../dataTransferObjects/newAccount.object';
+import { NewAccountDto } from '../dataTransferObjects/newAccount.dto';
 import IService from '../interfaces/service.interface';
 import { EntityManager } from 'typeorm';
 
-export class AccountService implements IService<NewAccount, Account> {
+export class AccountService implements IService<NewAccountDto, Account> {
   private accountRepository;
   constructor(accountRepository: AccountRepository) {
     this.accountRepository = accountRepository;
@@ -15,7 +15,7 @@ export class AccountService implements IService<NewAccount, Account> {
     return account;
   };
 
-  public create = async (newAccount: NewAccount): Promise<Account> => {
+  public create = async (newAccount: NewAccountDto): Promise<Account> => {
     const account = await this.accountRepository.add(newAccount);
     return account;
   };

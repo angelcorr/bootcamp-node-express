@@ -1,24 +1,25 @@
-import { NewExchanges } from '../dataTransferObjects/newExchanges.object';
+import { NewExchangesDto } from '../dataTransferObjects/newExchanges.dto';
 import { Exchange } from '../entity';
+import IService from '../interfaces/service.interface';
 import { repositories } from '../repositories';
 import { ExchangeRepository } from '../repositories/exchange.repository';
 
-export class ExchangeService {
+export class ExchangeService implements IService<Exchange, Exchange> {
   private exchangeRepository;
 
   constructor(exchangeRepository: ExchangeRepository) {
     this.exchangeRepository = exchangeRepository;
   }
 
-  public getAll = async (): Promise<Exchange[]> => {
+  public getExchanges = async (): Promise<Exchange[]> => {
     return await this.exchangeRepository.getAll();
   };
 
-  public add = async (data: NewExchanges): Promise<Exchange> => {
+  public create = async (data: NewExchangesDto): Promise<Exchange> => {
     return await this.exchangeRepository.add(data);
   };
 
-  public getExchange = async (currencyId: number): Promise<Exchange> => {
+  public getOne = async (currencyId: number): Promise<Exchange> => {
     return await this.exchangeRepository.getOne(currencyId);
   };
 }

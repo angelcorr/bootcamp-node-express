@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { services } from '../../services';
-import { UserService } from '../../services/user.services';
+import { UserService } from '../../services/user.service';
 import { User } from '../../entity';
 import constants from '../../constants';
 import UnauthorizedError from '../../customErrors/unauthorizedError';

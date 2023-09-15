@@ -2,15 +2,15 @@ import bcrypt from 'bcrypt';
 import { Account, CurrencyType, User } from '../entity';
 import constants from '../constants';
 import { repositories } from '../repositories';
-import { currencyService, CurrencyService } from './currency.services';
-import { accountService, AccountService } from './account.services';
+import { currencyService, CurrencyService } from './currency.service';
+import { accountService, AccountService } from './account.service';
 import { UserRepository } from '../repositories/user.repository';
 import IService from '../interfaces/service.interface';
-import { SignUp } from '../dataTransferObjects/signUp.object';
+import { SignUpDto } from '../dataTransferObjects/signUp.dto';
 import NotFoundError from '../customErrors/notFoundError';
-import { UserWithoutHash } from '../dataTransferObjects/userWithoutHas.object';
+import { UserWithoutHashDto } from '../dataTransferObjects/userWithoutHas.dto';
 
-export class UserService implements IService<SignUp, User> {
+export class UserService implements IService<SignUpDto, User> {
   private currencyService;
   private accountService;
   private userRepository;
@@ -25,7 +25,7 @@ export class UserService implements IService<SignUp, User> {
     this.userRepository = userRepository;
   }
 
-  public create = async (signUp: SignUp): Promise<User> => {
+  public create = async (signUp: SignUpDto): Promise<User> => {
     const { lastName, firstName, email, password } = signUp;
     const salt = await bcrypt.genSalt(constants.SALTED_ROUNDS);
     const hashPassword = await bcrypt.hash(password, salt);
@@ -70,7 +70,7 @@ export class UserService implements IService<SignUp, User> {
     return user;
   };
 
-  public getById = async (id: string): Promise<UserWithoutHash> => {
+  public getById = async (id: string): Promise<UserWithoutHashDto> => {
     return await this.userRepository.getUserById(id);
   };
 

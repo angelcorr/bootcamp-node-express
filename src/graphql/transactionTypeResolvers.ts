@@ -18,9 +18,9 @@ export const deliverCurrency = async (parent: Transaction, args: unknown, contex
 };
 
 export const sourceExchange = async (parent: Transaction, args: unknown, contextValue: Context) => {
-  return contextValue.exchangeService.getExchange(parent.sourceCurrencyId);
+  return contextValue.exchangeService.getOne(parent.sourceCurrencyId);
 };
 
 export const deliverExchange = async (parent: Transaction, args: unknown, contextValue: Context) => {
-  return contextValue.exchangeService.getExchange(parent.deliverCurrencyId);
+  return contextValue.exchangeService.getOne(parent.deliverCurrencyId);
 };

@@ -1,8 +1,8 @@
-import { userService } from './user.services';
-import { accountService } from './account.services';
-import { currencyService } from './currency.services';
-import { transactionService } from './transaction.services';
-import { exchangeService } from './exchange.services';
+import { userService } from './user.service';
+import { accountService } from './account.service';
+import { currencyService } from './currency.service';
+import { transactionService } from './transaction.service';
+import { exchangeService } from './exchange.service';
 
 export const services = {
   userService,

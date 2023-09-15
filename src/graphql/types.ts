@@ -22,6 +22,10 @@ export type CreateTransactionArgs = {
   description: string;
 };
 
+export type GetUserArgs = {
+  id: string;
+};
+
 export type Context = {
   transactionService: TransactionService;
   userService: UserService;

@@ -3,16 +3,16 @@
 import IService from '../interfaces/service.interface';
 import { Account, Transaction, accountTransactionType } from '../entity';
 import { repositories } from '../repositories';
-import { NewTransaction } from '../dataTransferObjects/newTransaction.object';
+import { NewTransactionDto } from '../dataTransferObjects/newTransaction.dto';
 import { TransactionRepository } from '../repositories/transaction.repository';
-import { AccountService, accountService } from './account.services';
+import { AccountService, accountService } from './account.service';
 import UnprocessableContentError from '../customErrors/unprocessableContentError';
-import { ExchangeService, exchangeService } from './exchange.services';
-import { TransactionRequest } from '../dataTransferObjects/transactionRequest.object';
-import { Transactions } from '../dataTransferObjects/transactions.object';
+import { ExchangeService, exchangeService } from './exchange.service';
+import { TransactionRequestDto } from '../dataTransferObjects/transactionRequest.dto';
+import { TransactionsDto } from '../dataTransferObjects/transactions.dto';
 import { buildTransaction } from '../repositories/buildTransaction.repository';
 
-export class TransactionService implements IService<NewTransaction, Transaction> {
+export class TransactionService implements IService<NewTransactionDto, Transaction> {
   private transactionRepository;
   private accountService;
   private exchangeService;
@@ -27,13 +27,13 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     this.exchangeService = exchangeService;
   }
 
-  public create = async (newTransaction: NewTransaction): Promise<Transaction> => {
+  public create = async (newTransaction: NewTransactionDto): Promise<Transaction> => {
     let newAmount: number;
     const { sourceAccountId, amount, deliverAccountId, description } = newTransaction;
     const sourceAccountData = await this.accountService.getOne(sourceAccountId);
     const deliveryAccountData = await this.accountService.getOne(deliverAccountId);
-    const sourceExchangeData = await this.exchangeService.getExchange(sourceAccountData.currency.id);
-    const deliverExchangeData = await this.exchangeService.getExchange(deliveryAccountData.currency.id);
+    const sourceExchangeData = await this.exchangeService.getOne(sourceAccountData.currency.id);
+    const deliverExchangeData = await this.exchangeService.getOne(deliveryAccountData.currency.id);
     newAmount = amount;
 
     if (sourceAccountData.currency.id !== deliveryAccountData.currency.id) {
@@ -71,13 +71,9 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     });
   };
 
-  public getOne = async (id: string): Promise<Transaction> => {
-    const transaction = await this.transactionRepository.getById(id);
+  public getOne = async (id: string): Promise<Transaction> => this.transactionRepository.getById(id);
 
-    return transaction;
-  };
-
-  public getTransactions = async (transactionRequest: TransactionRequest): Promise<Transactions> => {
+  public getTransactions = async (transactionRequest: TransactionRequestDto): Promise<TransactionsDto> => {
     const transactionsList = await this.transactionRepository.getTransactions(transactionRequest);
 
     if (transactionRequest.graphql) return transactionsList;
@@ -98,7 +94,7 @@ export class TransactionService implements IService<NewTransaction, Transaction>
     const transactionsRest = transactionsList.transactions.map(cleanTransaction);
 
     const newTransactionObject = { ...transactionsList, transactions: transactionsRest };
-    return newTransactionObject as Transactions;
+    return newTransactionObject as TransactionsDto;
   };
 }
 

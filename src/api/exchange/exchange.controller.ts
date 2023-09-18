@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { services } from '../../services';
-import { ExchangeService } from '../../services/exchange.services';
+import { ExchangeService } from '../../services/exchange.service';
 
 export class ExchangeController {
   private exchangeService;
@@ -10,7 +10,7 @@ export class ExchangeController {
   }
 
   public getExchanges = async (req: Request, res: Response) => {
-    const exchanges = await this.exchangeService.getAll();
+    const exchanges = await this.exchangeService.getExchanges();
     res.status(200).send({ exchanges });
   };
 }

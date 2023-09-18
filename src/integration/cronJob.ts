@@ -3,7 +3,7 @@ import axios from 'axios';
 import constants from '../constants';
 import env from '../config';
 import { CurrencyType } from '../entity';
-import { currencyService } from '../services/currency.services';
+import { currencyService } from '../services/currency.service';
 import { services } from '../services';
 
 cron.schedule('00 8 * * *', async () => {
@@ -37,7 +37,7 @@ cron.schedule('00 8 * * *', async () => {
     rate: 1,
   };
 
-  await services.exchangeService.add(eurExchange);
-  await services.exchangeService.add(usdExchange);
-  await services.exchangeService.add(uyuExchange);
+  await services.exchangeService.create(eurExchange);
+  await services.exchangeService.create(usdExchange);
+  await services.exchangeService.create(uyuExchange);
 });

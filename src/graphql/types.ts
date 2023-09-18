@@ -1,8 +1,8 @@
-import { TransactionService } from '../services/transaction.services';
-import { UserService } from '../services/user.services';
-import { AccountService } from '../services/account.services';
-import { CurrencyService } from '../services/currency.services';
-import { ExchangeService } from '../services/exchange.services';
+import { TransactionService } from '../services/transaction.service';
+import { UserService } from '../services/user.service';
+import { AccountService } from '../services/account.service';
+import { CurrencyService } from '../services/currency.service';
+import { ExchangeService } from '../services/exchange.service';
 
 export type GetTransactionsArgs = {
   page: number;
@@ -20,6 +20,10 @@ export type CreateTransactionArgs = {
   deliverAccountId: string;
   amount: number;
   description: string;
+};
+
+export type GetUserArgs = {
+  id: string;
 };
 
 export type Context = {

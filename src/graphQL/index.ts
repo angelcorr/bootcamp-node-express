@@ -1,10 +1,10 @@
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-import { transactionService } from '../services/transaction.services';
-import { userService } from '../services/user.services';
-import { accountService } from '../services/account.services';
-import { currencyService } from '../services/currency.services';
-import { exchangeService } from '../services/exchange.services';
+import { transactionService } from '../services/transaction.service';
+import { userService } from '../services/user.service';
+import { accountService } from '../services/account.service';
+import { currencyService } from '../services/currency.service';
+import { exchangeService } from '../services/exchange.service';
 import dateScalar from './dateScalar';
 import typeDefs from './typeDefs';
 import { transactions, user } from './queryResolvers';

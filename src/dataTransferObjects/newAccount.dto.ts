@@ -1,6 +1,6 @@
 import { Currency, User } from '../entity';
 
-export type NewAccount = {
+export type NewAccountDto = {
   capital: number;
   user: User;
   currency: Currency;

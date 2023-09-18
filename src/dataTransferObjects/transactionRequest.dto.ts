@@ -1,8 +1,7 @@
 import { z } from 'zod';
+import { Pagination } from './pagination.dto';
 
-export type TransactionRequest = {
-  page: number;
-  pageSize: number;
+export type TransactionRequestDto = Pagination & {
   userId: string | undefined;
   dateFrom: Date | undefined;
   dateTo: Date | undefined;

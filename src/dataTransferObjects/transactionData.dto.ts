@@ -1,7 +1,7 @@
 import { EntityManager } from 'typeorm';
 import { Account, Exchange } from '../entity';
 
-export type TransactionData = {
+export type TransactionDataDto = {
   sourceAccount: Account;
   deliverAccount: Account;
   description: string;

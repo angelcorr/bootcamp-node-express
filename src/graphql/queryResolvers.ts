@@ -1,4 +1,4 @@
-import { Context, GetTransactionsArgs } from './types';
+import { Context, GetTransactionsArgs, GetUserArgs } from './types';
 
 export const transactions = async (parent: undefined, args: GetTransactionsArgs, contextValue: Context) => {
   const page = args.page ?? 1;
@@ -25,10 +25,5 @@ export const transactions = async (parent: undefined, args: GetTransactionsArgs,
   return transactions;
 };
 
-export const user = async (parent: undefined, args: GetTransactionsArgs, contextValue: Context) => {
-  const userId = args.userId as string;
-
-  const user = await contextValue.userService.getById(userId);
-
-  return user;
-};
+export const user = async (parent: undefined, args: GetUserArgs, contextValue: Context) =>
+  contextValue.userService.getById(args.id);

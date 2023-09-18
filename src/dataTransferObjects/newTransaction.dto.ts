@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export type NewTransaction = {
+export type NewTransactionDto = {
   sourceAccountId: string;
   deliverAccountId: string;
   description: string;

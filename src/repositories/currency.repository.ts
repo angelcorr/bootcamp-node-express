@@ -3,32 +3,29 @@ import { Currency } from '../entity';
 import IRepository from './repository.interface';
 
 export class CurrencyRepository implements IRepository<Currency, Currency> {
-  public add = async (currencyData: Currency): Promise<Currency> => {
-    const currencyCreated = DataSourceFunction(Currency).create(currencyData);
+  private repository = DataSourceFunction(Currency);
 
-    const currency = await DataSourceFunction(Currency).save(currencyCreated);
-    return currency;
+  public add = async (currencyData: Currency): Promise<Currency> => {
+    const currencyCreated = this.repository.create(currencyData);
+
+    return this.repository.save(currencyCreated);
   };
 
   public getByCode = async (code: string): Promise<Currency> => {
-    const currency = await DataSourceFunction(Currency).findOneBy({ code });
+    const currency = await this.repository.findOneBy({ code });
     if (!currency) throw new Error(`Code not found: ${code}`);
 
     return currency;
   };
 
   public getCurrencyById = async (id: number): Promise<Currency> => {
-    const found = await DataSourceFunction(Currency).findOneBy({ id });
+    const found = await this.repository.findOneBy({ id });
     if (!found) throw new Error(`Id not found: ${id}`);
 
     return found;
   };
 
-  public getAll = async (): Promise<Currency[]> => {
-    const allCurrencies = await DataSourceFunction(Currency).find();
-
-    return allCurrencies;
-  };
+  public getAll = async (): Promise<Currency[]> => this.repository.find();
 }
 
 export const currencyRepository = new CurrencyRepository();

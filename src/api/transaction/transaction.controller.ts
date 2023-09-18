@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { services } from '../../services';
-import { TransactionService } from '../../services/transaction.services';
-import { UserService } from '../../services/user.services';
+import { TransactionService } from '../../services/transaction.service';
+import { UserService } from '../../services/user.service';
 import UnauthorizedError from '../../customErrors/unauthorizedError';
 import { User } from '../../entity';
 

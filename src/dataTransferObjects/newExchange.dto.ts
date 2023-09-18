@@ -1,6 +1,6 @@
 import { Currency } from '../entity';
 
-export type NewExchangesDto = {
+export type NewExchangeDto = {
   currency: Currency;
   date: Date;
   rate: number;
